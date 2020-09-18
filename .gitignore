@@ -7,3 +7,5 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
+*.ftpconfig
+application/config/database.php
