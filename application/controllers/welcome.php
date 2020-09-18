@@ -1,27 +1,28 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
 class Welcome extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
+	function __construct()
 	{
-		$this->load->view('welcome_message');
+		parent::__construct();
+		$this->load->library('login_manager');
+	}
+	
+	function index()
+	{
+		$user = $this->login_manager->get_user();
+		// get open bugs, order with most recently updated at the top 
+		$bugs = $user->bugs;
+		$bugs->where_related_status('closed', FALSE);
+		$bugs->include_related('status', 'name', TRUE, TRUE);
+		$bugs = $bugs->order_by('updated', 'DESC')->order_by_related_status('sortorder')->limit(25)->get_iterated();
+		
+		$this->output->enable_profiler(TRUE);
+		$this->load->view('template_header', array('title' => 'Welcome', 'section' => 'welcome'));
+		$this->load->view('welcome/index', array('bugs' => $bugs));
+		$this->load->view('template_footer');
 	}
 }
 
 /* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* Location: ./system/application/controllers/welcome.php */
