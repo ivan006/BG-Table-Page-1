@@ -202,7 +202,7 @@ class Bugs extends MY_Controller {
 			'bugs' => FALSE,
 			'bug' => $bug,
 			'form_fields' => $form_fields,
-			'url' => 'bugs/search'
+			'url' => 'bugs/bugs/search'
 		);
 
 		if( $search &&  empty($search['args']))
@@ -225,7 +225,7 @@ class Bugs extends MY_Controller {
 	function _write_search($array, $page = 1)
 	{
 		// convert post to search, redirect (for bookmarkability)
-		$url = 'bugs/search';
+		$url = 'bugs/bugs/search';
 		if( ! empty($array['text']))
 		{
 			$url .= '/text:' . str_replace('%', '~', rawurlencode(utf8_encode($this->input->post('text'))));
