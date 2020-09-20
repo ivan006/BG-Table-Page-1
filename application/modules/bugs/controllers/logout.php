@@ -1,13 +1,13 @@
 <?php
 
-class Logout extends CI_Controller {
+class Logout extends MY_Controller {
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('login_manager', array('autologin' => FALSE));
 	}
-	
+
 	function index()
 	{
 		$this->login_manager->logout();

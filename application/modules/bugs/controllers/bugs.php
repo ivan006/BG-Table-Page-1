@@ -1,6 +1,6 @@
 <?php
 
-class Bugs extends CI_Controller {
+class Bugs extends MY_Controller {
 
 	function __construct()
 	{
@@ -8,18 +8,18 @@ class Bugs extends CI_Controller {
 		// prevent non-logged-in access
 		$this->load->library('login_manager');
 	}
-	
+
 	function index()
 	{
-		
+
 	}
-	
+
 	function report($save = FALSE)
 	{
 		$bug = new Bug();
 		$this->_edit('Report a Bug', 'report', $bug, 'bugs/report/save', $save);
 	}
-	
+
 	function edit($id)
 	{
 		$bug = new Bug();
@@ -42,10 +42,10 @@ class Bugs extends CI_Controller {
 			show_error('Invalid Bug ID');
 		}
 	}
-	
+
 	/**
-	 * Called by the edit and report segments. 
-	 * 
+	 * Called by the edit and report segments.
+	 *
 	 * @param string $title For the header
 	 * @param string $section For the header
 	 * @param Bug $bug Bug to edit or a blank bug
@@ -53,7 +53,7 @@ class Bugs extends CI_Controller {
 	 * @param boolean $save If TRUE, then attempt a save.
 	 */
 	function _edit($title, $section, $bug, $url, $save)
-	{	
+	{
 		if($save)
 		{
 			// attempt to save the bug
@@ -67,7 +67,7 @@ class Bugs extends CI_Controller {
 				'category',
 				'user'
 			));
-			
+
 			// We also have to specify the editor...
 			$rel['editor'] = $this->login_manager->get_user();
 			if( ! $bug->exists())
@@ -92,14 +92,14 @@ class Bugs extends CI_Controller {
 				redirect('bugs/view/' . $bug->id);
 			}
 		}
-		
+
 		// Load the htmlform extension, so we can generate the form.
 		$bug->load_extension('htmlform');
-		
+
 		// We want to limit the users to those who are assignable (not simply bug reporters)
 		$users = new User();
 		$users->get_assignable();
-		
+
 		// This is how are form will be rendered
 		$form_fields = array(
 			'id', // Hidden id field
@@ -115,36 +115,36 @@ class Bugs extends CI_Controller {
 				'list' => $users // limit the users to the list above
 			)
 		);
-		
+
 		// Send the results to the views
 		$this->output->enable_profiler(TRUE);
 		$this->load->view('template_header', array('title' => $title, 'section' => $section));
 		$this->load->view('bugs/edit', array('bug' => $bug, 'form_fields' => $form_fields, 'url' => $url));
 		$this->load->view('template_footer');
 	}
-	
+
 	function search()
 	{
 		$this->output->enable_profiler(TRUE);
-		
+
 		if( ! empty($_POST))
 		{
 			// convert post to search, redirect (for bookmarkability)
 			$url = $this->_write_search($_POST);
 			redirect($url);
 		}
-		
+
 		$search = FALSE;
-		
+
 		$args = func_get_args();
 		if( ! empty($args))
 		{
 			$search = $this->_read_search($args);
 		}
-		
+
 		$bug = new Bug();
 		$bug->load_extension('htmlform');
-		
+
 		$values = array('text' => '', 'priority' => array(), 'status' => array(), 'category' => array(), 'user' => array());
 		if($search)
 		{
@@ -156,11 +156,11 @@ class Bugs extends CI_Controller {
 				}
 			}
 		}
-		
+
 		// Lets limit the users for a bug to Users and Admins
 		$users = new User();
 		$users->get_assignable();
-		
+
 		// Search Form Layout
 		$form_fields = array(
 			'text' => array(
@@ -196,7 +196,7 @@ class Bugs extends CI_Controller {
 				'list' => $users // limit the users to the ones selected above
 			)
 		);
-		
+
 		$view_data = array(
 			'search' => $search,
 			'bugs' => FALSE,
@@ -204,24 +204,24 @@ class Bugs extends CI_Controller {
 			'form_fields' => $form_fields,
 			'url' => 'bugs/search'
 		);
-		
+
 		if( $search &&  empty($search['args']))
 		{
 			// show error that nothing was selected
-			$bug->error_message('general', 'Nothing was selected'); 
+			$bug->error_message('general', 'Nothing was selected');
 		}
-		
+
 		if($search && ! empty($search['args']))
 		{
 			$view_data['bugs'] = $this->_process_search($search);
 		}
-		
+
 		$this->output->enable_profiler(TRUE);
 		$this->load->view('template_header', array('title' => 'Find Bugs', 'section' => 'search'));
 		$this->load->view('bugs/search', $view_data);
 		$this->load->view('template_footer');
 	}
-	
+
 	function _write_search($array, $page = 1)
 	{
 		// convert post to search, redirect (for bookmarkability)
@@ -240,11 +240,11 @@ class Bugs extends CI_Controller {
 		$url .= '/page:' . $page;
 		return $url;
 	}
-	
+
 	function _read_search($args)
 	{
 		$search = array('args' => array(), 'page' => 0);
-			
+
 		// build search query
 		foreach($args as $a)
 		{
@@ -267,10 +267,10 @@ class Bugs extends CI_Controller {
 				$search['args'][$key] = explode('~', $value);
 			}
 		}
-		
+
 		return $search;
 	}
-	
+
 	function _process_search($search)
 	{
 		$bugs = new Bug();
@@ -311,14 +311,14 @@ class Bugs extends CI_Controller {
 		}
 		$limit = 15;
 		$page = $limit * $search['page'];
-		
+
 		// add in extras
 		$bugs->include_related('status', 'name', TRUE, TRUE);
 		$bugs->order_by('updated', 'DESC');
-		
+
 		return $bugs->get_paged_iterated($search['page'], $limit);
 	}
-	
+
 	function view($id)
 	{
 		$bug = new Bug();
@@ -330,12 +330,12 @@ class Bugs extends CI_Controller {
 		{
 			show_error('Invalid Bug ID');
 		}
-		
+
 		$bug->categories->get_iterated();
 		$bug->users->get_iterated();
-		
+
 		$this->load->helper('typography');
-		
+
 		$this->output->enable_profiler(TRUE);
 		$this->load->view('template_header', array('title' => 'Bug: ' . $bug->title, 'section' => 'search'));
 		$this->load->view('bugs/view', array('bug' => $bug));

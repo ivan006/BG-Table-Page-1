@@ -1,13 +1,13 @@
 <?php
 
-class Login extends CI_Controller {
+class Login extends MY_Controller {
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->library('login_manager', array('autologin' => FALSE));
 	}
-	
+
 	function index()
 	{
 		$user = $this->login_manager->get_user();
@@ -33,14 +33,14 @@ class Login extends CI_Controller {
 				}
 				else
 				{
-					// otherwise, redirect to the stored page that was last accessed. 
+					// otherwise, redirect to the stored page that was last accessed.
 					redirect($login_redirect);
 				}
-			} 
+			}
 		}
-		
+
 		$user->load_extension('htmlform');
-		
+
 		$this->output->enable_profiler(TRUE);
 		$this->load->view('template_header', array('title' => 'Login', 'hide_nav' => TRUE));
 		$this->load->view('login', array('user' => $user));
