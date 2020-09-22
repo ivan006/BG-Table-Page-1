@@ -107,8 +107,12 @@ class Migrations_c extends MY_Controller
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
 		$tables = array();
+		$nth_table = 0;
 		foreach ($relationships as $table_key => $table_value) {
-			$tables[$table_key][] = array(
+
+			$tables[$nth_table]["name"] = $table_key;
+			$tables[$nth_table]["primary_key"] = "id";
+			$tables[$nth_table]["fields"][] = array(
 				"name" => "id",
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
@@ -117,7 +121,7 @@ class Migrations_c extends MY_Controller
 			);
 			foreach ($table_value["children"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][] = array(
+				$tables[$nth_table]["fields"][] = array(
 					"name" => $rel_value."_children",
 					"type" => "BIGINT",
 					"collation" => "UNSIGNED",
@@ -125,12 +129,14 @@ class Migrations_c extends MY_Controller
 			}
 			foreach ($table_value["parents"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][] = array(
+				$tables[$nth_table]["fields"][] = array(
 					"name" => $rel_value."_id",
 					"type" => "BIGINT",
 					"collation" => "UNSIGNED",
 				);
 			}
+
+			$nth_table = $nth_table+1;
 		}
 		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
 
