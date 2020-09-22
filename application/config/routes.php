@@ -38,11 +38,13 @@
 |
 */
 
-$route['default_controller'] = "bugs/welcome";
+$route['default_controller'] = "trips/trips_c";
 $route['404_override'] = '';
 
 $route['welcome'] = "bugs/welcome";
 $route['login'] = "bugs/login";
+$route['migrations'] = "trips/migrations_c";
+$route['migration_structure'] = "trips/migrations_c/migration_structure";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
