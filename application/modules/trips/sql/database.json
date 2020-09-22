@@ -1,0 +1,12 @@
+{
+    "trips": [
+        "events"
+    ],
+    "events": [],
+    "products": [
+        "events"
+    ],
+    "organizations": [
+        "products"
+    ]
+}

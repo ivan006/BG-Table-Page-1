@@ -43,8 +43,8 @@ $route['404_override'] = '';
 
 $route['welcome'] = "bugs/welcome";
 $route['login'] = "bugs/login";
-$route['migrations'] = "trips/migrations_c";
-$route['migration_structure'] = "trips/migrations_c/migration_structure";
+$route['migration/sql'] = "trips/migrations_c/sql";
+$route['migration/tables'] = "trips/migrations_c/tables";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

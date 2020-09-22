@@ -7,21 +7,16 @@ class Migrations_c extends MY_Controller
 		parent::__construct();
 	}
 
-	function index()
+	function sql()
 	{
-		$table_data_path = APPPATH.'modules/trips/sql/table_data.php';
-		include($table_data_path);
+		$tables_path = APPPATH.'modules/trips/sql/tables.json';
+		// include($tables_path);
+		$tables = file_get_contents($tables_path);
+		$tables = json_decode($tables, true);
+		// $tables = json_encode($tables, JSON_PRETTY_PRINT);
 
-		$sql = $this->sql($result);
-		echo "<pre>";
-		echo $sql;
-		echo "</pre>";
-	}
-
-	function sql($database_data)
-	{
 		ob_start();
-		foreach ($database_data as $table_key => $table) {
+		foreach ($tables as $table_key => $table) {
 
 			echo "CREATE TABLE `".$table["name"]."` "."(\n";
 
@@ -78,39 +73,92 @@ class Migrations_c extends MY_Controller
 		?>
 
 		<?php
-		$result = ob_get_contents();
+		$sql = ob_get_contents();
 
 		ob_end_clean();
 
-		return $result;
-
-
-
+		echo "<pre>";
+		echo $sql;
+		echo "</pre>";
 	}
 
-	function tryecho($string)
+
+
+	function tables()
 	{
-		if (isset($string)) {
-			echo $string;
+		$database_path = APPPATH.'modules/trips/sql/database.json';
+		// include($database_path);
+		$database = file_get_contents($database_path);
+		$database = json_decode($database, true);
+		// $database_json = json_encode($database, JSON_PRETTY_PRINT);
+
+		$relationships = array();
+		foreach ($database as $table_key => $table_value) {
+			$relationships[$table_key]["children"] = $table_value;
+			$relationships[$table_key]["parents"] = array();
 		}
+		foreach ($relationships as $table_key => $table_value) {
+			foreach ($table_value["children"] as $relative_key => $relative_value) {
+				if (isset($relationships[$relative_value])) {
+					array_push($relationships[$relative_value]["parents"],$table_key);
+				}
+			}
+		}
+		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
+
+		$tables = array();
+		foreach ($relationships as $table_key => $table_value) {
+			$tables[$table_key][] = array(
+				"name" => "id",
+				"type" => "BIGINT",
+				"collation" => "UNSIGNED",
+				"null" => "NOT NULL",
+				"a_i" => "AUTO_INCREMENT",
+			);
+			foreach ($table_value["children"] as $rel_key => $rel_value) {
+				$rel_value = $this->grammar_singular($rel_value);
+				$tables[$table_key][] = array(
+					"name" => $rel_value."_children",
+					"type" => "BIGINT",
+					"collation" => "UNSIGNED",
+				);
+			}
+			foreach ($table_value["parents"] as $rel_key => $rel_value) {
+				$rel_value = $this->grammar_singular($rel_value);
+				$tables[$table_key][] = array(
+					"name" => $rel_value."_id",
+					"type" => "BIGINT",
+					"collation" => "UNSIGNED",
+				);
+			}
+		}
+		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
 
 
+		echo "<pre>";
+		echo $tables_json;
+		echo "</pre>";
 	}
 
-	function database_data()
-	{
-		// $database_data_path = APPPATH.'modules/trips/sql/database_data.php';
-		// include($database_data_path);
-		//
-		// $array_code = $this->table_data($result);
-		// echo "<pre>";
-		// echo $array_code;
-		// echo "</pre>";
+	function endsWith( $haystack, $needle ) {
+		$length = strlen( $needle );
+		if( !$length ) {
+			return true;
+		}
+		return substr( $haystack, -$length ) === $needle;
 	}
 
-	function table_data($database_data)
-	{
+	function grammar_singular( $string ) {
+		if ($this->endsWith( $string, "ies" )) {
+			$string = substr($string, 0, -3)."y";
+		} elseif ($this->endsWith( $string, "s" )) {
+			$string = substr($string, 0, -1);
+		}
+		return $string;
 	}
+
+
+
 
 
 
