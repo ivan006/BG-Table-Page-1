@@ -1,0 +1,34 @@
+{
+    "trips": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    },
+    "events": {
+        "trip_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "product_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    },
+    "products": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "organization_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    },
+    "organizations": {
+        "product_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    }
+}

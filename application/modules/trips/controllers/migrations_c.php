@@ -1,3 +1,4 @@
+
 <?php
 class Migrations_c extends MY_Controller
 {
@@ -7,26 +8,24 @@ class Migrations_c extends MY_Controller
 		parent::__construct();
 	}
 
-	function sql()
+	function three()
 	{
-		$tables_path = APPPATH.'modules/trips/sql/tables.json';
-		// include($tables_path);
-		$tables = file_get_contents($tables_path);
-		$tables = json_decode($tables, true);
-		// $tables = json_encode($tables, JSON_PRETTY_PRINT);
+		$two_path = APPPATH.'modules/trips/sql/two.json';
+		// include($two_path);
+		$two = file_get_contents($two_path);
+		$two = json_decode($two, true);
+		// $two = json_encode($two, JSON_PRETTY_PRINT);
 
 		ob_start();
-		foreach ($tables as $table_key => $table) {
+		foreach ($two as $table_key => $table) {
 
-			echo "CREATE TABLE `".$table["name"]."` "."(\n";
-
-			foreach ($table["fields"] as $field_key => $field_value) {
+			echo "CREATE TABLE `".$table_key."` "."(\n";
+			echo "`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,\n";
+			foreach ($table as $field_key => $field_value) {
 				$fld = $field_value;
-				if (isset($fld["name"])) {
-					echo "`";
-					echo $fld["name"];
-					echo "` ";
-				}
+				echo "`";
+				echo $field_key;
+				echo "` ";
 				if (isset($fld["type"])) {
 					echo $fld["type"];
 					// echo " ";
@@ -64,9 +63,7 @@ class Migrations_c extends MY_Controller
 				echo ",\n";
 
 			}
-			if (isset($table["primary_key"])) {
-				echo "PRIMARY KEY (`".$table["primary_key"]."`)\n";
-			}
+			echo "PRIMARY KEY (`id`)\n";
 			echo ") ENGINE = InnoDB;\n";
 			echo "\n";
 		}
@@ -84,16 +81,16 @@ class Migrations_c extends MY_Controller
 
 
 
-	function tables()
+	function two()
 	{
-		$database_path = APPPATH.'modules/trips/sql/database.json';
-		// include($database_path);
-		$database = file_get_contents($database_path);
-		$database = json_decode($database, true);
-		// $database_json = json_encode($database, JSON_PRETTY_PRINT);
+		$one_path = APPPATH.'modules/trips/sql/one.json';
+		// include($one_path);
+		$one = file_get_contents($one_path);
+		$one = json_decode($one, true);
+		// $one_json = json_encode($one, JSON_PRETTY_PRINT);
 
 		$relationships = array();
-		foreach ($database as $table_key => $table_value) {
+		foreach ($one as $table_key => $table_value) {
 			$relationships[$table_key]["children"] = $table_value;
 			$relationships[$table_key]["parents"] = array();
 		}
@@ -110,27 +107,25 @@ class Migrations_c extends MY_Controller
 		$nth_table = 0;
 		foreach ($relationships as $table_key => $table_value) {
 
-			$tables[$nth_table]["name"] = $table_key;
-			$tables[$nth_table]["primary_key"] = "id";
-			$tables[$nth_table]["fields"][] = array(
-				"name" => "id",
-				"type" => "BIGINT",
-				"collation" => "UNSIGNED",
-				"null" => "NOT NULL",
-				"a_i" => "AUTO_INCREMENT",
-			);
+			// $tables[$table_key]["name"] = $table_key;
+			// $tables[$table_key]["primary_key"] = "id";
+			// $tables[$table_key][] = array(
+			// 	"name" => "id",
+			// 	"type" => "BIGINT",
+			// 	"collation" => "UNSIGNED",
+			// 	"null" => "NOT NULL",
+			// 	"a_i" => "AUTO_INCREMENT",
+			// );
 			foreach ($table_value["children"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$nth_table]["fields"][] = array(
-					"name" => $rel_value."_children",
+				$tables[$table_key][$rel_value."_children"] = array(
 					"type" => "BIGINT",
 					"collation" => "UNSIGNED",
 				);
 			}
 			foreach ($table_value["parents"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$nth_table]["fields"][] = array(
-					"name" => $rel_value."_id",
+				$tables[$table_key][$rel_value."_id"] = array(
 					"type" => "BIGINT",
 					"collation" => "UNSIGNED",
 				);
