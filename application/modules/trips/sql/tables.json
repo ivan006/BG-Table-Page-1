@@ -4,13 +4,6 @@
 		"primary_key": "id",
 		"fields": [
 			{
-				"name": "id",
-				"type": "BIGINT",
-				"collation": "UNSIGNED",
-				"null": "NOT NULL",
-				"a_i": "AUTO_INCREMENT"
-			},
-			{
 				"name": "event_children",
 				"type": "BIGINT",
 				"collation": "UNSIGNED"
@@ -22,11 +15,9 @@
 		"primary_key": "id",
 		"fields": [
 			{
-				"name": "id",
+				"name": "trip_id",
 				"type": "BIGINT",
-				"collation": "UNSIGNED",
-				"null": "NOT NULL",
-				"a_i": "AUTO_INCREMENT"
+				"collation": "UNSIGNED"
 			},
 			{
 				"name": "product_id",
@@ -40,19 +31,12 @@
 		"primary_key": "id",
 		"fields": [
 			{
-				"name": "id",
-				"type": "BIGINT",
-				"collation": "UNSIGNED",
-				"null": "NOT NULL",
-				"a_i": "AUTO_INCREMENT"
-			},
-			{
-				"name": "organization_id",
+				"name": "event_children",
 				"type": "BIGINT",
 				"collation": "UNSIGNED"
 			},
 			{
-				"name": "event_children",
+				"name": "organization_id",
 				"type": "BIGINT",
 				"collation": "UNSIGNED"
 			}
@@ -63,14 +47,7 @@
 		"primary_key": "id",
 		"fields": [
 			{
-				"name": "id",
-				"type": "BIGINT",
-				"collation": "UNSIGNED",
-				"null": "NOT NULL",
-				"a_i": "AUTO_INCREMENT"
-			},
-			{
-				"name": "products_children",
+				"name": "product_children",
 				"type": "BIGINT",
 				"collation": "UNSIGNED"
 			}
