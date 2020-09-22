@@ -3,7 +3,12 @@
         "event_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
-        }
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
     },
     "events": {
         "trip_id": {
@@ -13,7 +18,16 @@
         "product_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
-        }
+        },
+				"time": {
+					"type": "DATETIME",
+					"null": "NULL"
+				},
+				"price": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
     },
     "products": {
         "event_children": {
@@ -23,12 +37,27 @@
         "organization_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
-        }
+        },
+				"rate": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				},
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
     },
     "organizations": {
         "product_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
-        }
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
     }
 }
