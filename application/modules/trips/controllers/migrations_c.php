@@ -8,16 +8,24 @@ class Migrations_c extends MY_Controller
 		parent::__construct();
 	}
 
-	function three()
+	function index()
 	{
-		$two_path = APPPATH.'modules/trips/sql/two.json';
-		// include($two_path);
-		$two = file_get_contents($two_path);
-		$two = json_decode($two, true);
-		// $two = json_encode($two, JSON_PRETTY_PRINT);
+		$data["sql_two"] = $this->sql_two();
+		$data["sql_three"] = $this->sql_three();
+
+		$this->load->view('migrations_v', $data);
+	}
+
+	function sql_three()
+	{
+		$sql_two_path = APPPATH.'modules/trips/sql/sql_two.json';
+		// include($sql_two_path);
+		$sql_two = file_get_contents($sql_two_path);
+		$sql_two = json_decode($sql_two, true);
+		// $sql_two = json_encode($sql_two, JSON_PRETTY_PRINT);
 
 		ob_start();
-		foreach ($two as $table_key => $table) {
+		foreach ($sql_two as $table_key => $table) {
 
 			echo "CREATE TABLE `".$table_key."` "."(\n";
 			echo "`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT ,\n";
@@ -74,14 +82,10 @@ class Migrations_c extends MY_Controller
 
 		ob_end_clean();
 
-		echo "<pre>";
-		echo $sql;
-		echo "</pre>";
+		return $sql;
 	}
 
-
-
-	function two()
+	function sql_two()
 	{
 		$one_path = APPPATH.'modules/trips/sql/one.json';
 		// include($one_path);
@@ -136,9 +140,63 @@ class Migrations_c extends MY_Controller
 		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
 
 
-		echo "<pre>";
-		echo $tables_json;
-		echo "</pre>";
+		return $tables_json;
+	}
+
+	function model_two()
+	{
+		$one_path = APPPATH.'modules/trips/sql/one.json';
+		$one = file_get_contents($one_path);
+		$one = json_decode($one, true);
+
+		$relationships = array();
+		foreach ($one as $table_key => $table_value) {
+			$relationships[$table_key]["has_many"] = $table_value;
+			$relationships[$table_key]["has_one"] = array();
+		}
+		foreach ($relationships as $table_key => $table_value) {
+			foreach ($table_value["children"] as $relative_key => $relative_value) {
+				if (isset($relationships[$relative_value])) {
+					array_push($relationships[$relative_value]["parents"],$table_key);
+				}
+			}
+		}
+		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
+
+		$tables = array();
+		$nth_table = 0;
+		foreach ($relationships as $table_key => $table_value) {
+
+			// $tables[$table_key]["name"] = $table_key;
+			// $tables[$table_key]["primary_key"] = "id";
+			// $tables[$table_key][] = array(
+			// 	"name" => "id",
+			// 	"type" => "BIGINT",
+			// 	"collation" => "UNSIGNED",
+			// 	"null" => "NOT NULL",
+			// 	"a_i" => "AUTO_INCREMENT",
+			// );
+			foreach ($table_value["children"] as $rel_key => $rel_value) {
+				$rel_value = $this->grammar_singular($rel_value);
+				$tables[$table_key][$rel_value."_children"] = array(
+					"type" => "BIGINT",
+					"collation" => "UNSIGNED",
+				);
+			}
+			foreach ($table_value["parents"] as $rel_key => $rel_value) {
+				$rel_value = $this->grammar_singular($rel_value);
+				$tables[$table_key][$rel_value."_id"] = array(
+					"type" => "BIGINT",
+					"collation" => "UNSIGNED",
+				);
+			}
+
+			$nth_table = $nth_table+1;
+		}
+		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
+
+
+		return $tables_json;
 	}
 
 	function endsWith( $haystack, $needle ) {
