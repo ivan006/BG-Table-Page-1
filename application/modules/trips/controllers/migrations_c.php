@@ -12,6 +12,7 @@ class Migrations_c extends MY_Controller
 	{
 		$data["sql_two"] = $this->sql_two();
 		$data["sql_three"] = $this->sql_three();
+		$data["model_two"] = $this->model_two();
 
 		$this->load->view('migrations_v', $data);
 	}
@@ -93,18 +94,7 @@ class Migrations_c extends MY_Controller
 		$one = json_decode($one, true);
 		// $one_json = json_encode($one, JSON_PRETTY_PRINT);
 
-		$relationships = array();
-		foreach ($one as $table_key => $table_value) {
-			$relationships[$table_key]["children"] = $table_value;
-			$relationships[$table_key]["parents"] = array();
-		}
-		foreach ($relationships as $table_key => $table_value) {
-			foreach ($table_value["children"] as $relative_key => $relative_value) {
-				if (isset($relationships[$relative_value])) {
-					array_push($relationships[$relative_value]["parents"],$table_key);
-				}
-			}
-		}
+		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
 		$tables = array();
@@ -120,14 +110,14 @@ class Migrations_c extends MY_Controller
 			// 	"null" => "NOT NULL",
 			// 	"a_i" => "AUTO_INCREMENT",
 			// );
-			foreach ($table_value["children"] as $rel_key => $rel_value) {
+			foreach ($table_value["has_many"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
 				$tables[$table_key][$rel_value."_children"] = array(
 					"type" => "BIGINT",
 					"collation" => "UNSIGNED",
 				);
 			}
-			foreach ($table_value["parents"] as $rel_key => $rel_value) {
+			foreach ($table_value["has_one"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
 				$tables[$table_key][$rel_value."_id"] = array(
 					"type" => "BIGINT",
@@ -143,11 +133,8 @@ class Migrations_c extends MY_Controller
 		return $tables_json;
 	}
 
-	function model_two()
+	function relationships($one)
 	{
-		$one_path = APPPATH.'modules/trips/sql/one.json';
-		$one = file_get_contents($one_path);
-		$one = json_decode($one, true);
 
 		$relationships = array();
 		foreach ($one as $table_key => $table_value) {
@@ -155,48 +142,66 @@ class Migrations_c extends MY_Controller
 			$relationships[$table_key]["has_one"] = array();
 		}
 		foreach ($relationships as $table_key => $table_value) {
-			foreach ($table_value["children"] as $relative_key => $relative_value) {
+			foreach ($table_value["has_many"] as $relative_key => $relative_value) {
 				if (isset($relationships[$relative_value])) {
-					array_push($relationships[$relative_value]["parents"],$table_key);
+					array_push($relationships[$relative_value]["has_one"],$table_key);
 				}
 			}
 		}
+
+		return $relationships;
+	}
+
+	function model_two()
+	{
+		$one_path = APPPATH.'modules/trips/sql/one.json';
+		$one = file_get_contents($one_path);
+		$one = json_decode($one, true);
+
+		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
-		$tables = array();
-		$nth_table = 0;
+
+		ob_start();
+		// foreach ($sql_two as $table_key => $table) {
 		foreach ($relationships as $table_key => $table_value) {
 
-			// $tables[$table_key]["name"] = $table_key;
-			// $tables[$table_key]["primary_key"] = "id";
-			// $tables[$table_key][] = array(
-			// 	"name" => "id",
-			// 	"type" => "BIGINT",
-			// 	"collation" => "UNSIGNED",
-			// 	"null" => "NOT NULL",
-			// 	"a_i" => "AUTO_INCREMENT",
-			// );
-			foreach ($table_value["children"] as $rel_key => $rel_value) {
-				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][$rel_value."_children"] = array(
-					"type" => "BIGINT",
-					"collation" => "UNSIGNED",
-				);
-			}
-			foreach ($table_value["parents"] as $rel_key => $rel_value) {
-				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][$rel_value."_id"] = array(
-					"type" => "BIGINT",
-					"collation" => "UNSIGNED",
-				);
-			}
+			echo "class ".ucfirst($table_key) ." extends DataMapper {\n\n";
+			echo "	public \$has_one = array(\n";
+			if (isset($table_value["has_one"])) {
+				foreach ($table_value["has_one"] as $relative_key => $relative_value) {
+					echo "		\"";
+					echo $relative_value;
+					echo "\",\n";
 
-			$nth_table = $nth_table+1;
+				}
+			} else {
+				echo "		// code...";
+			}
+			echo "	);\n\n";
+
+			echo "	public \$has_many = array(\n";
+			if (isset($table_value["has_many"])) {
+				foreach ($table_value["has_many"] as $relative_key => $relative_value) {
+					echo "		\"";
+					echo $relative_value;
+					echo "\",\n";
+
+				}
+			} else {
+				echo "		// code...";
+			}
+			echo "	);\n\n\n";
 		}
-		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
+		?>
+
+		<?php
+		$result = ob_get_contents();
+
+		ob_end_clean();
 
 
-		return $tables_json;
+		return $result;
 	}
 
 	function endsWith( $haystack, $needle ) {
