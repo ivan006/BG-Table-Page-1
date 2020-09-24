@@ -46,5 +46,8 @@ $route['welcome'] = "bugs/welcome";
 $route['login'] = "bugs/login";
 $route['migration'] = "trips/migrations_c";
 
+$route['webslesson'] = "trips/webslesson_c";
+$route['webslesson/api'] = "trips/webslesson_c/api";
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
