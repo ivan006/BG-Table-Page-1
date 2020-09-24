@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "trips/trips_c";
+$route['default_controller'] = "trips/techontech_c/index";
 $route['404_override'] = '';
 
 $route['bugs'] = "bugs/welcome";
@@ -56,6 +56,13 @@ $route['techontech/fetch'] = 'trips/techontech_c/fetch';
 $route['techontech/delete'] = 'trips/techontech_c/delete';
 $route['techontech/edit'] = 'trips/techontech_c/edit';
 $route['techontech/update'] = 'trips/techontech_c/update';
+
+$route['trips'] = 'trips/trips_c/index';
+$route['trips/insert'] = 'trips/trips_c/insert';
+$route['trips/fetch'] = 'trips/trips_c/fetch';
+$route['trips/delete'] = 'trips/trips_c/delete';
+$route['trips/edit'] = 'trips/trips_c/edit';
+$route['trips/update'] = 'trips/trips_c/update';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

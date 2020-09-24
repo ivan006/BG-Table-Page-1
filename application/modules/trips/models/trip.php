@@ -2,15 +2,36 @@
 
 class Trip extends DataMapper {
 
-	public $has_one = array(
-	);
-
-	public $has_many = array(
-		"event",
-	);
-
-
-	public function insert_name()
+	public function get_entries()
 	{
+		$query = $this->db->get('trips');
+		// if (count( $query->result() ) > 0) {
+		return $query->result();
+		// }
 	}
+
+	public function insert_entry($data)
+	{
+		return $this->db->insert('trips', $data);
+	}
+
+	public function delete_entry($id){
+		return $this->db->delete('trips', array('id' => $id));
+	}
+
+	public function edit_entry($id){
+		$this->db->select("*");
+		$this->db->from("trips");
+		$this->db->where("id", $id);
+		$query = $this->db->get();
+		if (count($query->result()) > 0) {
+			return $query->row();
+		}
+	}
+
+	public function update_entry($data)
+	{
+		return $this->db->update('trips', $data, array('id' => $data['id']));
+	}
+
 }
