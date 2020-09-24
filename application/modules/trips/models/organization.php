@@ -6,7 +6,7 @@ class Organization extends DataMapper {
 	);
 
 	public $has_many = array(
-		'product',
+		"product",
 	);
 
 	public function insert_name()
