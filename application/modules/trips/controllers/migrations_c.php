@@ -166,7 +166,7 @@ class Migrations_c extends MY_Controller
 		// foreach ($sql_two as $table_key => $table) {
 		foreach ($relationships as $table_key => $table_value) {
 
-			echo "class ".ucfirst($table_key) ." extends DataMapper {\n\n";
+			echo "class ".ucfirst($this->grammar_singular($table_key)) ." extends DataMapper {\n\n";
 			echo "	public \$has_one = array(\n";
 			if (isset($table_value["has_one"])) {
 				foreach ($table_value["has_one"] as $relative_key => $relative_value) {
