@@ -52,8 +52,8 @@
                       <input type="text" id="name" class="form-control">
                     </div>
                     <div class="form-group">
-                      <label for="">Email</label>
-                      <input type="email" id="email" class="form-control">
+                      <label for="">Event_children</label>
+                      <input type="event_children" id="event_children" class="form-control">
                     </div>
                   </form>
                 </div>
@@ -74,7 +74,7 @@
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
-                  <th>Email</th>
+                  <th>Event_children</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -103,8 +103,8 @@
                 <input type="text" id="edit_name" class="form-control">
               </div>
               <div class="form-group">
-                <label for="">Email</label>
-                <input type="email" id="edit_email" class="form-control">
+                <label for="">Event_children</label>
+                <input type="event_children" id="edit_event_children" class="form-control">
               </div>
             </form>
           </div>
@@ -148,9 +148,9 @@
         e.preventDefault();
 
         var name = $("#name").val();
-        var email = $("#email").val();
+        var event_children = $("#event_children").val();
 
-        if (name == "" || email == "") {
+        if (name == "") {
           alert("Both field is required");
         }else{
           $.ajax({
@@ -159,7 +159,7 @@
             dataType: "json",
             data: {
               name: name,
-              email: email
+              event_children: event_children
             },
             success: function(data){
               if (data.responce == "success") {
@@ -206,7 +206,7 @@
                             return a = i++;
                           } },
                           { "data": "name" },
-                          { "data": "email" },
+                          { "data": "event_children" },
                           { "render": function ( data, type, row, meta ) {
                             var a = `
                                     <a href="#" value="${row.id}" id="del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
@@ -315,7 +315,7 @@
                 $('#edit_modal').modal('show');
                 $("#edit_record_id").val(data.post.id);
                 $("#edit_name").val(data.post.name);
-                $("#edit_email").val(data.post.email);
+                $("#edit_event_children").val(data.post.event_children);
               }else{
                 toastr["error"](data.message);
               }
@@ -331,9 +331,9 @@
 
         var edit_record_id = $("#edit_record_id").val();
         var edit_name = $("#edit_name").val();
-        var edit_email = $("#edit_email").val();
+        var edit_event_children = $("#edit_event_children").val();
 
-        if (edit_record_id == "" || edit_name == "" || edit_email == "") {
+        if (edit_record_id == "" || edit_name == "") {
           alert("Both field is required");
         }else{
           $.ajax({
@@ -343,7 +343,7 @@
             data: {
               edit_record_id: edit_record_id,
               edit_name: edit_name,
-              edit_email: edit_email
+              edit_event_children: edit_event_children
             },
             success: function(data){
               if (data.responce == "success") {
