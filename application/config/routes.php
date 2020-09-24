@@ -41,6 +41,7 @@
 $route['default_controller'] = "trips/trips_c";
 $route['404_override'] = '';
 
+$route['bugs'] = "bugs/welcome";
 $route['welcome'] = "bugs/welcome";
 $route['login'] = "bugs/login";
 $route['migration'] = "trips/migrations_c";
