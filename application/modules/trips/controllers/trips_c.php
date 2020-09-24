@@ -5,7 +5,6 @@ class Trips_c extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
-		include( APPPATH."libraries/datatables/DataTables.php" );
 	}
 
 	function index()
