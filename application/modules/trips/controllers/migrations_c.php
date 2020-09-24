@@ -171,7 +171,7 @@ class Migrations_c extends MY_Controller
 			if (isset($table_value["has_one"])) {
 				foreach ($table_value["has_one"] as $relative_key => $relative_value) {
 					echo "		\"";
-					echo $relative_value;
+					echo $this->grammar_singular($relative_value);
 					echo "\",\n";
 
 				}
@@ -184,7 +184,7 @@ class Migrations_c extends MY_Controller
 			if (isset($table_value["has_many"])) {
 				foreach ($table_value["has_many"] as $relative_key => $relative_value) {
 					echo "		\"";
-					echo $relative_value;
+					echo $this->grammar_singular($relative_value);
 					echo "\",\n";
 
 				}
