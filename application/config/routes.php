@@ -49,5 +49,13 @@ $route['migration'] = "trips/migrations_c";
 $route['webslesson'] = "trips/webslesson_c";
 $route['webslesson/api'] = "trips/webslesson_c/api";
 
+
+$route['techontech'] = 'trips/techontech_c/index';
+$route['techontech/insert'] = 'trips/techontech_c/insert';
+$route['techontech/fetch'] = 'trips/techontech_c/fetch';
+$route['techontech/delete'] = 'trips/techontech_c/delete';
+$route['techontech/edit'] = 'trips/techontech_c/edit';
+$route['techontech/update'] = 'trips/techontech_c/update';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
