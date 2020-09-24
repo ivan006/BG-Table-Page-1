@@ -14,6 +14,11 @@ class Migrations_c extends MY_Controller
 		$data["sql_three"] = $this->sql_three();
 		$data["model_two"] = $this->model_two();
 
+
+		// header('Content-Type: application/json');
+		// echo json_encode($class);
+		// exit;
+
 		$this->load->view('migrations_v', $data);
 	}
 
