@@ -1,8 +1,6 @@
 <?php
-class Trips_c extends MY_Controller
+class Table_c extends MY_Controller
 {
-
-	public $g_tbls_table = "trips";
 
 	public function __construct()
 	{
@@ -14,45 +12,45 @@ class Trips_c extends MY_Controller
 		$this->load->library('../modules/trips/controllers/g_tbls');
 	}
 
-	public function index()
+	public function index($g_tbls_table)
 	{
-		$data['rows'] = $this->g_tbls->table_rows($this->g_tbls_table);
-		$data['table'] = $this->g_tbls_table;
+		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);
+		$data['table'] = $g_tbls_table;
 		$this->load->view('trips_v', $data);
 
 	}
 
-	public function insert()
+	public function insert($g_tbls_table)
 	{
-		$result = $this->g_tbls->insert($this->g_tbls_table);
+		$result = $this->g_tbls->insert($g_tbls_table);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
-	public function fetch()
+	public function fetch($g_tbls_table)
 	{
-		$result = $this->g_tbls->fetch($this->g_tbls_table);
+		$result = $this->g_tbls->fetch($g_tbls_table);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
-	public function delete()
+	public function delete($g_tbls_table)
 	{
-		$result = $this->g_tbls->delete($this->g_tbls_table);
+		$result = $this->g_tbls->delete($g_tbls_table);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
-	public function edit()
+	public function edit($g_tbls_table)
 	{
-		$result = $this->g_tbls->edit($this->g_tbls_table);
+		$result = $this->g_tbls->edit($g_tbls_table);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
 
-	public function update()
+	public function update($g_tbls_table)
 	{
-		$result = $this->g_tbls->update($this->g_tbls_table);
+		$result = $this->g_tbls->update($g_tbls_table);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}

@@ -14,14 +14,14 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"/>
 
-    <title>Hello, world!</title>
+    <title><?php echo $table; ?></title>
   </head>
   <body>
     <div class="container">
       <div class="row">
         <div class="col-md-12 mt-5">
           <h1 class="text-center">
-            Codeigniter Datatables Ajax Crud Tutorial
+            <?php echo $table; ?>
           </h1>
           <hr style="background-color: black; color: black; height: 1px;">
         </div>
@@ -47,14 +47,26 @@
                 <div class="modal-body">
                   <!-- Add Records Form -->
                   <form action="" method="post" id="form">
-                    <div class="form-group">
+                    <?php
+                    foreach ($rows as $key => $value) {
+                      if ($value !== "id") {
+                        ?>
+                        <div class="form-group">
+                          <label for=""><?php echo $value; ?></label>
+                          <input type="<?php echo $value; ?>" id="<?php echo $value; ?>" class="form-control">
+                        </div>
+                        <?php
+                      }
+                    }
+                    ?>
+                    <!-- <div class="form-group">
                       <label for="">Name</label>
                       <input type="text" id="name" class="form-control">
                     </div>
                     <div class="form-group">
                       <label for="">Event_children</label>
                       <input type="event_children" id="event_children" class="form-control">
-                    </div>
+                    </div> -->
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -73,8 +85,17 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Name</th>
-                  <th>Event_children</th>
+                  <?php
+                  foreach ($rows as $key => $value) {
+                    if ($value !== "id") {
+                      ?>
+                      <th><?php echo $value; ?></th>
+                      <?php
+                    }
+                  }
+                  ?>
+                  <!-- <th>Name</th>
+                  <th>Event_children</th> -->
                   <th>Action</th>
                 </tr>
               </thead>
@@ -98,14 +119,26 @@
             <!-- Edit Record Form -->
             <form action="" method="post" id="edit_form">
               <input type="hidden" id="edit_record_id" name="edit_record_id" value="">
-              <div class="form-group">
+                <?php
+                foreach ($rows as $key => $value) {
+                  if ($value !== "id") {
+                    ?>
+                    <div class="form-group">
+                      <label for=""><?php echo $value; ?></label>
+                      <input type="<?php echo $value; ?>" id="edit_<?php echo $value; ?>" class="form-control">
+                    </div>
+                    <?php
+                  }
+                }
+                ?>
+              <!-- <div class="form-group">
                 <label for="">Name</label>
                 <input type="text" id="edit_name" class="form-control">
               </div>
               <div class="form-group">
                 <label for="">Event_children</label>
                 <input type="event_children" id="edit_event_children" class="form-control">
-              </div>
+              </div> -->
             </form>
           </div>
           <div class="modal-footer">
@@ -147,19 +180,38 @@
       $(document).on("click", "#add", function(e){
         e.preventDefault();
 
-        var name = $("#name").val();
-        var event_children = $("#event_children").val();
+        <?php
+        foreach ($rows as $key => $value) {
+          if ($value !== "id") {
+            ?>
+            var <?php echo $value; ?> = $("#<?php echo $value; ?>").val();
+            <?php
+          }
+        }
+        ?>
+        // var name = $("#name").val();
+        // var event_children = $("#event_children").val();
 
-        if (name == "") {
+        // if (name == "") {
+        if (1 !== 1) {
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>trips/insert",
+            url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/insert",
             type: "post",
             dataType: "json",
             data: {
-              name: name,
-              event_children: event_children
+              <?php
+              foreach ($rows as $key => $value) {
+                if ($value !== "id") {
+                  ?>
+                  <?php echo $value; ?>: <?php echo $value; ?>,
+                  <?php
+                }
+              }
+              ?>
+              // name: name,
+              // event_children: event_children
             },
             success: function(data){
               if (data.responce == "success") {
@@ -184,7 +236,7 @@
 
       function fetch(){
         $.ajax({
-          url: "<?php echo base_url(); ?>trips/fetch",
+          url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/fetch",
           type: "post",
           dataType: "json",
           success: function(data){
@@ -205,8 +257,17 @@
                           { "render": function(){
                             return a = i++;
                           } },
-                          { "data": "name" },
-                          { "data": "event_children" },
+                          <?php
+                          foreach ($rows as $key => $value) {
+                            if ($value !== "id") {
+                              ?>
+                              { "data": "<?php echo $value; ?>" },
+                              <?php
+                            }
+                          }
+                          ?>
+                          // { "data": "name" },
+                          // { "data": "event_children" },
                           { "render": function ( data, type, row, meta ) {
                             var a = `
                                     <a href="#" value="${row.id}" id="del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
@@ -254,7 +315,7 @@
           if (result.value) {
 
               $.ajax({
-                url: "<?php echo base_url(); ?>trips/delete",
+                url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/delete",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -304,7 +365,7 @@
         var edit_id = $(this).attr("value");
 
         $.ajax({
-          url: "<?php echo base_url(); ?>trips/edit",
+          url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/edit",
           type: "post",
           dataType: "json",
           data: {
@@ -314,8 +375,17 @@
             if (data.responce == "success") {
                 $('#edit_modal').modal('show');
                 $("#edit_record_id").val(data.post.id);
-                $("#edit_name").val(data.post.name);
-                $("#edit_event_children").val(data.post.event_children);
+                <?php
+                foreach ($rows as $key => $value) {
+                  if ($value !== "id") {
+                    ?>
+                    $("#edit_<?php echo $value; ?>").val(data.post.<?php echo $value; ?>);
+                    <?php
+                  }
+                }
+                ?>
+                // $("#edit_name").val(data.post.name);
+                // $("#edit_event_children").val(data.post.event_children);
               }else{
                 toastr["error"](data.message);
               }
@@ -330,20 +400,40 @@
         e.preventDefault();
 
         var edit_record_id = $("#edit_record_id").val();
-        var edit_name = $("#edit_name").val();
-        var edit_event_children = $("#edit_event_children").val();
+        <?php
+        foreach ($rows as $key => $value) {
+          if ($value !== "id") {
+            ?>
+            var edit_<?php echo $value; ?> = $("#edit_<?php echo $value; ?>").val();
+            <?php
+          }
+        }
+        ?>
 
-        if (edit_record_id == "" || edit_name == "") {
+        // var edit_name = $("#edit_name").val();
+        // var edit_event_children = $("#edit_event_children").val();
+
+        // if (edit_record_id == "" || edit_name == "") {
+        if (1 !== 1) {
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>trips/update",
+            url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/update",
             type: "post",
             dataType: "json",
             data: {
               edit_record_id: edit_record_id,
-              edit_name: edit_name,
-              edit_event_children: edit_event_children
+              <?php
+              foreach ($rows as $key => $value) {
+                if ($value !== "id") {
+                  ?>
+                  edit_<?php echo $value; ?>: edit_<?php echo $value; ?>,
+                  <?php
+                }
+              }
+              ?>
+              // edit_name: edit_name,
+              // edit_event_children: edit_event_children
             },
             success: function(data){
               if (data.responce == "success") {

@@ -1,8 +1,8 @@
 <?php
-class Trips_c extends MY_Controller
+class Events_c extends MY_Controller
 {
 
-	public $g_tbls_table = "trips";
+	public $g_tbls_table = "events";
 
 	public function __construct()
 	{

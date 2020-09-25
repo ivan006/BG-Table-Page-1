@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "trips/techontech_c/index";
+$route['default_controller'] = "trips/table_c/index/trips";
 $route['404_override'] = '';
 
 $route['bugs'] = "bugs/welcome";
@@ -63,6 +63,20 @@ $route['trips/fetch'] = 'trips/trips_c/fetch';
 $route['trips/delete'] = 'trips/trips_c/delete';
 $route['trips/edit'] = 'trips/trips_c/edit';
 $route['trips/update'] = 'trips/trips_c/update';
+
+$route['events'] = 'trips/events_c/index';
+$route['events/insert'] = 'trips/events_c/insert';
+$route['events/fetch'] = 'trips/events_c/fetch';
+$route['events/delete'] = 'trips/events_c/delete';
+$route['events/edit'] = 'trips/events_c/edit';
+$route['events/update'] = 'trips/events_c/update';
+
+$route['table/(:any)'] = 'trips/table_c/index/$1';
+$route['table_api/(:any)/insert'] = 'trips/table_c/insert/$1';
+$route['table_api/(:any)/fetch'] = 'trips/table_c/fetch/$1';
+$route['table_api/(:any)/delete'] = 'trips/table_c/delete/$1';
+$route['table_api/(:any)/edit'] = 'trips/table_c/edit/$1';
+$route['table_api/(:any)/update'] = 'trips/table_c/update/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
