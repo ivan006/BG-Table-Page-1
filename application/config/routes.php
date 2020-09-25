@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "trips/table_c/index/trips";
+$route['default_controller'] = "trips/table_c/list";
 $route['404_override'] = '';
 
 $route['bugs'] = "bugs/welcome";
