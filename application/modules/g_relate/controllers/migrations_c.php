@@ -24,7 +24,7 @@ class Migrations_c extends MY_Controller
 
 	function sql_three()
 	{
-		$sql_two_path = APPPATH.'modules/trips/sql/sql_two.json';
+		$sql_two_path = APPPATH.'modules/g_relate/sql/sql_two.json';
 		// include($sql_two_path);
 		$sql_two = file_get_contents($sql_two_path);
 		$sql_two = json_decode($sql_two, true);
@@ -93,7 +93,7 @@ class Migrations_c extends MY_Controller
 
 	function sql_two()
 	{
-		$one_path = APPPATH.'modules/trips/sql/one.json';
+		$one_path = APPPATH.'modules/g_relate/sql/one.json';
 		// include($one_path);
 		$one = file_get_contents($one_path);
 		$one = json_decode($one, true);
@@ -159,7 +159,7 @@ class Migrations_c extends MY_Controller
 
 	function model_two()
 	{
-		$one_path = APPPATH.'modules/trips/sql/one.json';
+		$one_path = APPPATH.'modules/g_relate/sql/one.json';
 		$one = file_get_contents($one_path);
 		$one = json_decode($one, true);
 
