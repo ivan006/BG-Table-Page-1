@@ -71,8 +71,8 @@ $route['events/edit'] = 'trips/events_c/edit';
 $route['events/update'] = 'trips/events_c/update';
 
 
-$route['migration'] = "g_relate/migrations_c";
 
+$route['migration'] = "g_relate/migrations_c";
 
 $route['g_relate/database'] = 'g_relate/database_c/database';
 
