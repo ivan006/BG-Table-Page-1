@@ -141,4 +141,17 @@ class G_tbls extends MY_Controller
     return $result;
   }
 
+  public function db_tables()
+  {
+
+    $row_query = array(
+      "SHOW TABLES",
+    );
+    $row_query = implode(" ", $row_query);
+    $result = $this->db->query($row_query)->result_array();
+    $result = array_column($result, 'Tables_in_greenbluegpyuty_db5');
+
+    return $result;
+  }
+
 }
