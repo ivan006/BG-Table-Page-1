@@ -272,6 +272,7 @@
                             var a = `
                                     <a href="#" value="${row.id}" id="del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
                                     <a href="#" value="${row.id}" id="edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
+                                    <a href="/record/tbl/<?php echo $table; ?>/rcd/${row.id}" class="btn btn-sm btn-outline-primary">View</i></a>
                             `;
                             return a;
                           } }

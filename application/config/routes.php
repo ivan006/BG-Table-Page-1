@@ -79,7 +79,7 @@ $route['table_api/(:any)/delete'] = 'trips/table_c/delete/$1';
 $route['table_api/(:any)/edit'] = 'trips/table_c/edit/$1';
 $route['table_api/(:any)/update'] = 'trips/table_c/update/$1';
 
-$route['record/tbl/(:any)/rcd/(:num)'] = 'trips/record_c/$1/$2';
+$route['record/tbl/(:any)/rcd/(:num)'] = 'trips/record_c/index/$1/$2';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

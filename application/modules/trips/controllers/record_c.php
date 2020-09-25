@@ -14,8 +14,11 @@ class Record_c extends MY_Controller
 
 	public function index($table, $record_id)
 	{
-		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);
-		$data['table'] = $g_tbls_table;
+		$data["data"]["table"] = $table;
+		$data["data"]["record_id"] = $record_id;
+		// header('Content-Type: application/json');
+		// echo json_encode($data);
+		// exit;
 		$this->load->view('record_v', $data);
 
 	}
