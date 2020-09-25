@@ -16,7 +16,7 @@ class Table_c extends MY_Controller
 	{
 		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);
 		$data['table'] = $g_tbls_table;
-		$this->load->view('trips_v', $data);
+		$this->load->view('table_v', $data);
 
 	}
 

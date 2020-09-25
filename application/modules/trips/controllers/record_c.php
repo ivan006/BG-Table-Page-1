@@ -12,4 +12,13 @@ class Record_c extends MY_Controller
 		$this->load->library('../modules/trips/controllers/g_tbls');
 	}
 
+	public function index($table, $record_id)
+	{
+		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);
+		$data['table'] = $g_tbls_table;
+		$this->load->view('record_v', $data);
+
+	}
+
+
 }

@@ -16,8 +16,8 @@ class Database_c extends MY_Controller
 	{
 		$data['tables'] = $this->g_tbls->db_tables();
 		// $data['table'] = $g_tbls_table;
-		$this->load->view('table_list_v', $data);
+		$this->load->view('database_v', $data);
 
 	}
-	
+
 }
