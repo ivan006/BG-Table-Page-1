@@ -154,7 +154,7 @@
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>techontech/insert",
+            url: "<?php echo base_url(); ?>trips/insert",
             type: "post",
             dataType: "json",
             data: {
@@ -184,7 +184,7 @@
 
       function fetch(){
         $.ajax({
-          url: "<?php echo base_url(); ?>techontech/fetch",
+          url: "<?php echo base_url(); ?>trips/fetch",
           type: "post",
           dataType: "json",
           success: function(data){
@@ -254,7 +254,7 @@
           if (result.value) {
 
               $.ajax({
-                url: "<?php echo base_url(); ?>techontech/delete",
+                url: "<?php echo base_url(); ?>trips/delete",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -304,7 +304,7 @@
         var edit_id = $(this).attr("value");
 
         $.ajax({
-          url: "<?php echo base_url(); ?>techontech/edit",
+          url: "<?php echo base_url(); ?>trips/edit",
           type: "post",
           dataType: "json",
           data: {
@@ -337,7 +337,7 @@
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>techontech/update",
+            url: "<?php echo base_url(); ?>trips/update",
             type: "post",
             dataType: "json",
             data: {
