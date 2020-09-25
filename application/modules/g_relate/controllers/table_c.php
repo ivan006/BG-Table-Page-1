@@ -8,8 +8,9 @@ class Table_c extends MY_Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		$this->load->model('trip');
-		$this->load->library('../modules/trips/controllers/g_tbls');
+		// $this->load->model('trip');
+		// $this->load->library('../modules/trips/controllers/g_tbls');
+		$this->load->library('g_tbls');
 	}
 
 	public function index($g_tbls_table)

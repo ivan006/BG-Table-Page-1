@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css"/>
 
-    <title><?php echo $table; ?></title>
+    <title></title>
   </head>
   <body>
     <div class="container">

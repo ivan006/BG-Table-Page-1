@@ -38,13 +38,12 @@
 |
 */
 
-$route['default_controller'] = "trips/database_c/database";
+$route['default_controller'] = "g_relate/database_c/database";
 $route['404_override'] = '';
 
 $route['bugs'] = "bugs/welcome";
 $route['welcome'] = "bugs/welcome";
 $route['login'] = "bugs/login";
-$route['migration'] = "trips/migrations_c";
 
 $route['webslesson'] = "trips/webslesson_c";
 $route['webslesson/api'] = "trips/webslesson_c/api";
@@ -71,15 +70,18 @@ $route['events/delete'] = 'trips/events_c/delete';
 $route['events/edit'] = 'trips/events_c/edit';
 $route['events/update'] = 'trips/events_c/update';
 
-$route['database'] = 'trips/database_c/database';
-$route['table/(:any)'] = 'trips/table_c/index/$1';
-$route['table_api/(:any)/insert'] = 'trips/table_c/insert/$1';
-$route['table_api/(:any)/fetch'] = 'trips/table_c/fetch/$1';
-$route['table_api/(:any)/delete'] = 'trips/table_c/delete/$1';
-$route['table_api/(:any)/edit'] = 'trips/table_c/edit/$1';
-$route['table_api/(:any)/update'] = 'trips/table_c/update/$1';
 
-$route['record/tbl/(:any)/rcd/(:num)'] = 'trips/record_c/index/$1/$2';
+$route['migration'] = "g_relate/migrations_c";
+
+$route['database'] = 'g_relate/database_c/database';
+$route['table/(:any)'] = 'g_relate/table_c/index/$1';
+$route['table_api/(:any)/insert'] = 'g_relate/table_c/insert/$1';
+$route['table_api/(:any)/fetch'] = 'g_relate/table_c/fetch/$1';
+$route['table_api/(:any)/delete'] = 'g_relate/table_c/delete/$1';
+$route['table_api/(:any)/edit'] = 'g_relate/table_c/edit/$1';
+$route['table_api/(:any)/update'] = 'g_relate/table_c/update/$1';
+
+$route['record/tbl/(:any)/rcd/(:num)'] = 'g_relate/record_c/index/$1/$2';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
