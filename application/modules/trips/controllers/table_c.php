@@ -12,14 +12,6 @@ class Table_c extends MY_Controller
 		$this->load->library('../modules/trips/controllers/g_tbls');
 	}
 
-	public function list()
-	{
-		$data['tables'] = $this->g_tbls->db_tables();
-		// $data['table'] = $g_tbls_table;
-		$this->load->view('table_list_v', $data);
-
-	}
-
 	public function index($g_tbls_table)
 	{
 		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);

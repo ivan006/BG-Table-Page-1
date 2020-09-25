@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "trips/table_c/list";
+$route['default_controller'] = "trips/database_c/database";
 $route['404_override'] = '';
 
 $route['bugs'] = "bugs/welcome";
@@ -71,7 +71,7 @@ $route['events/delete'] = 'trips/events_c/delete';
 $route['events/edit'] = 'trips/events_c/edit';
 $route['events/update'] = 'trips/events_c/update';
 
-$route['table_list'] = 'trips/table_c/list';
+$route['database'] = 'trips/database_c/database';
 $route['table/(:any)'] = 'trips/table_c/index/$1';
 $route['table_api/(:any)/insert'] = 'trips/table_c/insert/$1';
 $route['table_api/(:any)/fetch'] = 'trips/table_c/fetch/$1';
