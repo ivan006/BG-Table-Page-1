@@ -21,7 +21,7 @@
       <?php
       foreach ($tables as $key => $value) {
         ?>
-        <a href="/table/<?php echo $value ?>"><?php echo $value ?></a><br>
+        <a href="g_relate/table/t/<?php echo $value ?>"><?php echo $value ?></a><br>
         <?php
       }
       ?>

@@ -73,15 +73,18 @@ $route['events/update'] = 'trips/events_c/update';
 
 $route['migration'] = "g_relate/migrations_c";
 
-$route['database'] = 'g_relate/database_c/database';
-$route['table/(:any)'] = 'g_relate/table_c/index/$1';
-$route['table_api/(:any)/insert'] = 'g_relate/table_c/insert/$1';
-$route['table_api/(:any)/fetch'] = 'g_relate/table_c/fetch/$1';
-$route['table_api/(:any)/delete'] = 'g_relate/table_c/delete/$1';
-$route['table_api/(:any)/edit'] = 'g_relate/table_c/edit/$1';
-$route['table_api/(:any)/update'] = 'g_relate/table_c/update/$1';
 
-$route['record/tbl/(:any)/rcd/(:num)'] = 'g_relate/record_c/index/$1/$2';
+$route['g_relate/database'] = 'g_relate/database_c/database';
+
+$route['g_relate/table/t/(:any)'] = 'g_relate/table_c/index/$1';
+
+$route['g_relate/api/table/t/(:any)/insert'] = 'g_relate/table_c/insert/$1';
+$route['g_relate/api/table/t/(:any)/fetch'] = 'g_relate/table_c/fetch/$1';
+$route['g_relate/api/table/t/(:any)/delete'] = 'g_relate/table_c/delete/$1';
+$route['g_relate/api/table/t/(:any)/edit'] = 'g_relate/table_c/edit/$1';
+$route['g_relate/api/table/t/(:any)/update'] = 'g_relate/table_c/update/$1';
+
+$route['g_relate/record/t/(:any)/r/(:num)'] = 'g_relate/record_c/index/$1/$2';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

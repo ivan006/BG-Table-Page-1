@@ -197,7 +197,7 @@
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/insert",
+            url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/insert",
             type: "post",
             dataType: "json",
             data: {
@@ -236,7 +236,7 @@
 
       function fetch(){
         $.ajax({
-          url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/fetch",
+          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/fetch",
           type: "post",
           dataType: "json",
           success: function(data){
@@ -272,7 +272,7 @@
                             var a = `
                                     <a href="#" value="${row.id}" id="del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
                                     <a href="#" value="${row.id}" id="edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
-                                    <a href="/record/tbl/<?php echo $table; ?>/rcd/${row.id}" class="btn btn-sm btn-outline-primary">View</i></a>
+                                    <a href="/g_relate/record/t/<?php echo $table; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</i></a>
                             `;
                             return a;
                           } }
@@ -316,7 +316,7 @@
           if (result.value) {
 
               $.ajax({
-                url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/delete",
+                url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/delete",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -366,7 +366,7 @@
         var edit_id = $(this).attr("value");
 
         $.ajax({
-          url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/edit",
+          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/edit",
           type: "post",
           dataType: "json",
           data: {
@@ -419,7 +419,7 @@
           alert("Both field is required");
         }else{
           $.ajax({
-            url: "<?php echo base_url(); ?>table_api/<?php echo $table; ?>/update",
+            url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/update",
             type: "post",
             dataType: "json",
             data: {
