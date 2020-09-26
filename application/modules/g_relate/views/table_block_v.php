@@ -232,7 +232,7 @@ if (isset($table_type)) {
               var a = `
               <a href="#" value="${row.id}" id="<?php echo $table ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
               <a href="#" value="${row.id}" id="<?php echo $table ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
-              <a href="/g_relate/record/t/<?php echo $table; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</i></a>
+              <a href="/g_relate/record/t/<?php echo $table; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</a>
               `;
               return a;
             } }

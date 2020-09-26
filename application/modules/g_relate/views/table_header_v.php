@@ -47,6 +47,9 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12 mt-5">
+          <a href="/g_relate/database" class="btn btn-sm btn-outline-primary">
+            Database
+          </a>
           <h1 class="text-center">
             <?php echo $title; ?>
           </h1>

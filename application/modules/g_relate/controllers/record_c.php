@@ -22,11 +22,21 @@ class Record_c extends MY_Controller
 		$table_singular = $this->g_migrate->grammar_singular($table);
 		$data['title'] = $table_singular." ".$record_id;
 
+		$data['children'] = array();
 		foreach ($data['rows'] as $key => $value) {
 			if ($this->g_migrate->endsWith($value, "_children" )) {
 				$value_singular = substr($value, 0, -9);
-				$value_plural = $this->g_migrate->grammar_plural($value_singular);
-				$data['children'][$value] = $value_plural;
+				$relation_table = $this->g_migrate->grammar_plural($value_singular);
+				$data['children'][$value] = $relation_table;
+			}
+		}
+
+		$data['parents'] = array();
+		foreach ($data['rows'] as $key => $value) {
+			if ($this->g_migrate->endsWith($value, "_id" )) {
+				$value_singular = substr($value, 0, -3);
+				$relation_table = $this->g_migrate->grammar_plural($value_singular);
+				$data['parents'][$value] = $relation_table;
 			}
 		}
 
@@ -45,6 +55,24 @@ class Record_c extends MY_Controller
 			$data["table_type"] = $key;
 			$haystack = $table_singular."_id";
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
+			$this->load->view('table_block_v', $data);
+		}
+
+		foreach ($data['parents'] as $key => $value) {
+
+			$data['rows'] = $this->g_tbls->table_rows($value);
+
+			$haystack = "id";
+			$overview = $this->g_tbls->fetch_where($table, $haystack, $record_id)["posts"][0];
+			$parent_id = $overview->$key;
+			$data['table'] = $value;
+			// $data["table_type"] = $key;
+
+			$table_singular = $this->g_migrate->grammar_singular($value);
+			$data["table_type"] = $table_singular."_parent";
+
+			$haystack = "id";
+			$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
 			$this->load->view('table_block_v', $data);
 		}
 
