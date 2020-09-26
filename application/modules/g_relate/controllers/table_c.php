@@ -17,7 +17,11 @@ class Table_c extends MY_Controller
 	{
 		$data['rows'] = $this->g_tbls->table_rows($g_tbls_table);
 		$data['table'] = $g_tbls_table;
-		$this->load->view('table_v', $data);
+		$data["table_fetch"] = $g_tbls_table."/fetch";
+		$data['title'] = $g_tbls_table;
+		$this->load->view('table_header_v', $data);
+		$this->load->view('table_block_v', $data);
+		$this->load->view('table_footer_v');
 
 	}
 
@@ -31,6 +35,13 @@ class Table_c extends MY_Controller
 	public function fetch($g_tbls_table)
 	{
 		$result = $this->g_tbls->fetch($g_tbls_table);
+		header('Content-Type: application/json');
+		echo json_encode($result);
+	}
+
+	public function fetch_where($table, $haystack, $needle)
+	{
+		$result = $this->g_tbls->fetch_where($table, $haystack, $needle);
 		header('Content-Type: application/json');
 		echo json_encode($result);
 	}
