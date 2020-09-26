@@ -35,15 +35,16 @@ class Record_c extends MY_Controller
 
 		$data["table_type"] = "overview";
 		$haystack = "id";
-		$data["table_fetch"] = "$table/fetch_where/h/$haystack/n/$record_id";
+		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
 		foreach ($data['children'] as $key => $value) {
 
 			$data['rows'] = $this->g_tbls->table_rows($value);
+			$data['table'] = $value;
 			$data["table_type"] = $key;
 			$haystack = $table_singular."_id";
-			$data["table_fetch"] = $value."/fetch_where/h/$haystack/n/$record_id";
+			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 			$this->load->view('table_block_v', $data);
 		}
 
