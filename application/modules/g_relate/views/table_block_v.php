@@ -104,7 +104,7 @@ if (isset($table_type)) {
       <div class="modal-body">
         <!-- Edit Record Form -->
         <form action="" method="post" id="<?php echo $table ?>_edit_form">
-          <input type="hidden" id="edit_record_id" name="edit_record_id" value="">
+          <input type="hidden" id="<?php echo $table ?>_edit_record_id" name="edit_record_id" value="">
           <?php
           foreach ($rows as $key => $value) {
             if ($value !== "id") {
@@ -176,7 +176,7 @@ if (isset($table_type)) {
         success: function(data){
           if (data.responce == "success") {
             $('#<?php echo $table ?>_records').DataTable().destroy();
-            fetch();
+            <?php echo $table ?>_fetch();
             $('#<?php echo $table ?>_exampleModal').modal('hide');
             toastr["success"](data.message);
           }else{
@@ -194,7 +194,7 @@ if (isset($table_type)) {
 
   // Fetch Records
 
-  function fetch(){
+  function <?php echo $table ?>_fetch(){
     $.ajax({
       url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $table; ?>/<?php echo $table_fetch ?>",
       type: "post",
@@ -247,7 +247,7 @@ if (isset($table_type)) {
 
   }
 
-  fetch();
+  <?php echo $table ?>_fetch();
 
   // Delete Record
 
@@ -285,7 +285,7 @@ if (isset($table_type)) {
           success: function(data){
             if (data.responce == "success") {
               $('#<?php echo $table ?>_records').DataTable().destroy();
-              fetch();
+              <?php echo $table ?>_fetch();
               swalWithBootstrapButtons.fire(
               'Deleted!',
               'Your file has been deleted.',
@@ -399,7 +399,7 @@ if (isset($table_type)) {
         success: function(data){
           if (data.responce == "success") {
             $('#<?php echo $table ?>_records').DataTable().destroy();
-            fetch();
+            <?php echo $table ?>_fetch();
             $('#<?php echo $table ?>_edit_modal').modal('hide');
             toastr["success"](data.message);
           }else{

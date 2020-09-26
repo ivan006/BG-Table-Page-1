@@ -115,6 +115,7 @@ class G_tbls extends MY_Controller
 
 	      if ($this->db->update($table, $data, array('id' => $data['id']))) {
 	        $data = array('responce' => 'success', 'message' => 'Record update Successfully');
+	        // $data = $this->db->last_query();
 	      } else {
 	        $data = array('responce' => 'error', 'message' => 'Failed to update record');
 	      }
