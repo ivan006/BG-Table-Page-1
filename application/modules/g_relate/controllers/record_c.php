@@ -28,8 +28,8 @@ class Record_c extends MY_Controller
 		// echo json_encode($data['rows']);
 		// exit;
 
-		$children_types = $this->relationships($data['rows'], "_children");
-		$parent_types = $this->relationships($data['rows'], "_id");
+		$children_groups = $this->relationships($data['rows'], "_children");
+		$parent_groups = $this->relationships($data['rows'], "_id");
 
 
 		$this->load->view('table_header_v', $data);
@@ -39,7 +39,7 @@ class Record_c extends MY_Controller
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
-		foreach ($children_types as $key => $value) {
+		foreach ($children_groups as $key => $value) {
 
 			$data = array();
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
@@ -56,8 +56,8 @@ class Record_c extends MY_Controller
 		$overview_needle = $record_id;
 		$overview = $this->g_tbls->fetch_where($table, $overview_haystack, $overview_needle)["posts"][0];
 
-		foreach ($parent_types as $key => $parent_type) {
-			$data = $this->table_data($parent_type, $overview, "id");
+		foreach ($parent_groups as $key => $parent_group) {
+			$data = $this->table_data($parent_group, $overview, "id");
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -83,17 +83,17 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function table_data($parent_type, $overview, $suffix)
+	public function table_data($relationship_group, $overview, $suffix)
 	{
 
 
 		$data = array();
-		$data['rows'] = $this->g_tbls->table_rows($parent_type['table']);
-		$data['table'] = $parent_type['table'];
+		$data['rows'] = $this->g_tbls->table_rows($relationship_group['table']);
+		$data['table'] = $relationship_group['table'];
 		$haystack = "id";
-		$table_singular = $this->g_migrate->grammar_singular($parent_type['table']);
+		$table_singular = $this->g_migrate->grammar_singular($relationship_group['table']);
 		$data["table_type"] = $table_singular."_parent";
-		$parent_id = $overview[$parent_type['foreign_key']];
+		$parent_id = $overview[$relationship_group['foreign_key']];
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
 		return $data;
 
