@@ -29,41 +29,48 @@ class Table_c extends MY_Controller
 	{
 		$result = $this->g_tbls->insert($g_tbls_table);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
 	public function fetch($g_tbls_table)
 	{
 		$result = $this->g_tbls->fetch($g_tbls_table);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
 	public function fetch_where($table, $haystack, $needle)
 	{
 		$result = $this->g_tbls->fetch_where($table, $haystack, $needle);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
+	}
+
+	public function fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle)
+	{
+		$result = $this->g_tbls->fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle);
+		header('Content-Type: application/json');
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
 	public function delete($g_tbls_table)
 	{
 		$result = $this->g_tbls->delete($g_tbls_table);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
 	public function edit($g_tbls_table)
 	{
 		$result = $this->g_tbls->edit($g_tbls_table);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
 	public function update($g_tbls_table)
 	{
 		$result = $this->g_tbls->update($g_tbls_table);
 		header('Content-Type: application/json');
-		echo json_encode($result);
+		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 }

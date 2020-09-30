@@ -28,7 +28,7 @@ class Record_c extends MY_Controller
 		// echo json_encode($data['rows']);
 		// exit;
 
-		$children_groups = $this->relationships($data['rows'], "_children");
+		$children_dedicated_groups = $this->relationships($data['rows'], "_children");
 		$parent_groups = $this->relationships($data['rows'], "_id");
 
 
@@ -39,15 +39,15 @@ class Record_c extends MY_Controller
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
-		foreach ($children_groups as $key => $value) {
+		foreach ($children_dedicated_groups as $key => $value) {
 
+			$data['group_name'] = $value['table_singular']."_childlren";
+			$data['rows'] = $this->g_tbls->table_rows($value['table']);
+			$data['table'] = $value['table'];
 			
+			$haystack = $table_singular."_id";
 			$needle = $record_id;
-			$haystack = $value['table_singular']."_id";
-			$group_name = $table_singular."_childlren";
-
-			$data = $this->table_data($value, $group_name, $needle, $haystack);
-
+			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -58,11 +58,13 @@ class Record_c extends MY_Controller
 
 		foreach ($parent_groups as $key => $value) {
 
-			$needle = $overview[$value['foreign_key']];
-			$haystack = "id";
-			$group_name = $value['table_singular']."_parent";
+			$data['group_name'] = $value['table_singular']."_parent";
+			$data['rows'] = $this->g_tbls->table_rows($value['table']);
+			$data['table'] = $value['table'];
 
-			$data = $this->table_data($value, $group_name, $needle, $haystack);
+			$haystack = "id";
+			$needle = $overview[$value['foreign_key']];
+			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -89,16 +91,10 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function table_data($relationship_group, $group_name, $needle, $haystack)
+	public function fetch_request($needle, $haystack)
 	{
-
-		$data = array();
-		$data['rows'] = $this->g_tbls->table_rows($relationship_group['table']);
-		$data['table'] = $relationship_group['table'];
-		$data['group_name'] = $group_name;
-		$data["table_fetch"] = "fetch_where/h/$haystack/n/$needle";
-		return $data;
-
+		$result = "fetch_where/h/$haystack/n/$needle";
+		return $result;
 	}
 
 

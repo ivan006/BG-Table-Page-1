@@ -84,6 +84,7 @@ $route['g_relate/api/table/t/(:any)/delete'] = 'g_relate/table_c/delete/$1';
 $route['g_relate/api/table/t/(:any)/edit'] = 'g_relate/table_c/edit/$1';
 $route['g_relate/api/table/t/(:any)/update'] = 'g_relate/table_c/update/$1';
 $route['g_relate/api/table/t/(:any)/fetch_where/h/(:any)/n/(:any)'] = 'g_relate/table_c/fetch_where/$1/$2/$3';
+$route['g_relate/api/table/t/(:any)/fetch_join_where/t/(:any)/k/(:any)/h/(:any)/n/(:any)'] = 'g_relate/table_c/fetch_join_where/$1/$2/$3/$4/$5';
 
 $route['g_relate/record/t/(:any)/r/(:num)'] = 'g_relate/record_c/index/$1/$2';
 

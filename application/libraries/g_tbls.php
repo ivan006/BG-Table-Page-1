@@ -157,9 +157,25 @@ class G_tbls extends MY_Controller
 
   public function fetch_where($table, $haystack, $needle)
   {
-		$posts = $this->db->where($haystack, $needle)->get($table)->result_array();;
+		$posts = $this->db->where($haystack, $needle)->get($table)->result_array();
     $data = array('responce' => 'success', 'posts' => $posts);
     return $data;
+  }
+
+  public function fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle)
+  {
+
+		// $posts = $this->db->select('*')->where($haystack, $needle)->from($table_1)->join($table_2, "$table_1.$table_2_key = $table_2.id")->get()->result_array();
+
+		$posts = $this->db->select('*')->from($table_2)->join($table_1, "$table_1.$table_2_key = $table_2.id")->get()->result_array();
+
+		$data = array('responce' => 'success', 'posts' => $posts);
+    return $data;
+
+		// https://stackoverflow.com/questions/3492904/mysql-select-all-columns-from-one-table-and-some-from-another-table
+		// https://codeigniter.com/userguide3/database/query_builder.html
+		// https://green.bluegemify.co.za/g_relate/api/table/t/whats/fetch_where/h/id/n/1
+		// https://green.bluegemify.co.za/g_relate/api/table/t/what_when_links/fetch_join_where/t/whens/k/when_id/h/id/n/1
   }
 
 }
