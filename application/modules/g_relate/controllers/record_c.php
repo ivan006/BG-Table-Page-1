@@ -55,9 +55,16 @@ class Record_c extends MY_Controller
 			$needle = $record_id;
 			$group_name_suffix = "_shared_children";
 
-			$body["child_shared_groups"][] = array(
+			$body["child_shared_groups"][$key] = array(
 				"table_fetch" => "fetch_where/h/$haystack/n/$needle",
 				"group_name" => $value['table_singular'].$group_name_suffix,
+				"rows" => $this->g_tbls->table_rows($value['table']),
+				"table" => $value['table'],
+			);
+
+			// $body["child_shared_groups"][$key]["rows"];
+
+			$body["child_shared_groups"][$key]["lookup"] = array(
 				"rows" => $this->g_tbls->table_rows($value['table']),
 				"table" => $value['table'],
 			);
