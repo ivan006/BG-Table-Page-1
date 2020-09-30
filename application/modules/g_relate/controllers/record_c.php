@@ -16,63 +16,100 @@ class Record_c extends MY_Controller
 
 	public function index($table, $record_id)
 	{
-		$data['rows'] = $this->g_tbls->table_rows($table);
-		$data['table'] = $table;
-		$data["record_id"] = $record_id;
-		$table_singular = $this->g_migrate->grammar_singular($table);
-		$data['title'] = $table_singular." ".$record_id;
+		$overview_table_singular = $this->g_migrate->grammar_singular($table);
+		$overview_record = $this->g_tbls->fetch_where($table, "id", $record_id)["posts"][0];
+
+
+		$header["title"] = $overview_table_singular." ".$record_id;
+
+		$haystack = "id";
+		$needle = $record_id;
+		$body["overview"] = array(
+			"table_fetch" => "fetch_where/h/$haystack/n/$needle",
+			"group_name" => "overview",
+			"rows" => $this->g_tbls->table_rows($table),
+			"table" => $table,
+		);
+
+		$children_groups = $this->relationships($body["overview"]["rows"], "_children");
+
+		$body["overview"]["child_dedi_groups"] = array();
+		$body["overview"]["child_shared_groups"] = array();
+		foreach ($children_groups as $key => $value) {
+			if ($this->g_migrate->endsWith($value["table"], "_links")) {
+				$body["overview"]["child_shared_groups"][] = $value;
+			} else {
+				$body["overview"]["child_dedi_groups"][] = $value;
+			}
+		}
+		$body["overview"]["parent_groups"] = $this->relationships($body["overview"]["rows"], "_id");
 
 
 
+		$body["child_shared_groups"] = array();
+		foreach ($body["overview"]["child_shared_groups"] as $key => $value) {
+
+			$haystack = $overview_table_singular."_id";
+			$needle = $record_id;
+			$group_name_suffix = "_shared_children";
+
+			$body["child_shared_groups"][] = array(
+				"table_fetch" => "fetch_where/h/$haystack/n/$needle",
+				"group_name" => $value['table_singular'].$group_name_suffix,
+				"rows" => $this->g_tbls->table_rows($value['table']),
+				"table" => $value['table'],
+			);
+		}
 		// header('Content-Type: application/json');
-		// echo json_encode($data['rows']);
+		// echo json_encode($body["overview"]["child_shared_groups"], JSON_PRETTY_PRINT);
 		// exit;
 
-		$children_dedicated_groups = $this->relationships($data['rows'], "_children");
-		$parent_groups = $this->relationships($data['rows'], "_id");
+		$body["child_dedi_groups"] = array();
+		foreach ($body["overview"]["child_dedi_groups"] as $key => $value) {
 
-
-		$this->load->view('table_header_v', $data);
-
-		$data["group_name"] = "overview";
-		$haystack = "id";
-		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
-		$this->load->view('table_block_v', $data);
-
-		foreach ($children_dedicated_groups as $key => $value) {
-
-			$haystack = $table_singular."_id";
+			$haystack = $overview_table_singular."_id";
 			$needle = $record_id;
-			$group_name_suffix = "_childlren";
+			$group_name_suffix = "_dedicated_children";
 
-			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
-			$data['group_name'] = $value['table_singular'].$group_name_suffix;
-			$data['rows'] = $this->g_tbls->table_rows($value['table']);
-			$data['table'] = $value['table'];
-
-
-			$this->load->view('table_block_v', $data);
+			$body["child_dedi_groups"][] = array(
+				"table_fetch" => "fetch_where/h/$haystack/n/$needle",
+				"group_name" => $value['table_singular'].$group_name_suffix,
+				"rows" => $this->g_tbls->table_rows($value['table']),
+				"table" => $value['table'],
+			);
 		}
 
-		$overview_haystack = "id";
-		$overview_needle = $record_id;
-		$overview = $this->g_tbls->fetch_where($table, $overview_haystack, $overview_needle)["posts"][0];
-
-		foreach ($parent_groups as $key => $value) {
+		$body["parents"] = array();
+		foreach ($body["overview"]["parent_groups"] as $key => $value) {
 
 			$haystack = "id";
-			$needle = $overview[$value['foreign_key']];
+			$needle = $overview_record[$value['foreign_key']];
 			$group_name_suffix = "_parent";
 
-			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
-			$data['group_name'] = $value['table_singular'].$group_name_suffix;
-			$data['rows'] = $this->g_tbls->table_rows($value['table']);
-			$data['table'] = $value['table'];
-
-
-			$this->load->view('table_block_v', $data);
+			$body["parents"][] = array(
+				"table_fetch" => "fetch_where/h/$haystack/n/$needle",
+				"group_name" => $value['table_singular'].$group_name_suffix,
+				"rows" => $this->g_tbls->table_rows($value['table']),
+				"table" => $value['table'],
+			);
 		}
 
+		// header('Content-Type: application/json');
+		// echo json_encode($body, JSON_PRETTY_PRINT);
+		// exit;
+
+		$this->load->view('table_header_v', $header);
+		$this->load->view('table_block_v', $body["overview"]);
+
+		foreach ($body["child_dedi_groups"] as $key => $value) {
+			$this->load->view('table_block_v', $value);
+		}
+		foreach ($body["child_shared_groups"] as $key => $value) {
+			$this->load->view('table_block_v', $value);
+		}
+		foreach ($body["parents"] as $key => $value) {
+			$this->load->view('table_block_v', $value);
+		}
 		$this->load->view('table_footer_v');
 
 	}
@@ -93,12 +130,6 @@ class Record_c extends MY_Controller
 		}
 		return $result;
 
-	}
-
-	public function fetch_request($needle, $haystack)
-	{
-		$result = "fetch_where/h/$haystack/n/$needle";
-		return $result;
 	}
 
 
