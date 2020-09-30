@@ -65,28 +65,27 @@ class Record_c extends MY_Controller
 
 		foreach ($body["shared_children"] as $key => $value) {
 
+
 			$haystack = $body["overview"]["name"]["singular"]."_id";
 			$needle = $record_id;
 			$relation_name_suffix = "_shared_children";
 
-
-			$body["shared_children"][$key]["data"]["linking"] = array(
+			$body["shared_children"][$key]["data"] = array(
+				"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
+				"relation_name" => $value["name"]["singular"].$relation_name_suffix,
 				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
 			);
 
-			$body["shared_children"][$key]["data"]["lookup"] = array(
-				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
+			$body["shared_children"][$key]["data"]["extra"] = array(
+				"linking" => "",
+				"lookup" => "",
+				"join" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
 			);
 
-			$body["shared_children"][$key]["data"]["join"] = array(
-				"rows" => "",
-			);
-			
+
+
 			$body["shared_children"][$key]["data"]["rows"] = $this->g_tbls->table_rows($value["name"]["plural"]);
 
-
-			$body["shared_children"][$key]["data"]["data_endpoint"] = "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle";
-			$body["shared_children"][$key]["data"]["relation_name"] = $value["name"]["singular"].$relation_name_suffix;
 		}
 
 		foreach ($body["dedicated_children"] as $key => $value) {
@@ -97,7 +96,7 @@ class Record_c extends MY_Controller
 
 			$body["dedicated_children"][$key]["data"] = array(
 				"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
-				"relation_name" => $value['table_singular'].$relation_name_suffix,
+				"relation_name" => $value["name"]["singular"].$relation_name_suffix,
 				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
 			);
 		}
@@ -115,9 +114,9 @@ class Record_c extends MY_Controller
 			);
 		}
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 
 		$this->load->view('table_header_v', $header);
