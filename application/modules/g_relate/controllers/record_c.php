@@ -22,29 +22,14 @@ class Record_c extends MY_Controller
 		$table_singular = $this->g_migrate->grammar_singular($table);
 		$data['title'] = $table_singular." ".$record_id;
 
-		$data['children'] = array();
-		foreach ($data['rows'] as $key => $value) {
-			if ($this->g_migrate->endsWith($value, "_children" )) {
-				$value_singular = substr($value, 0, -9);
-				$relation_table = $this->g_migrate->grammar_plural($value_singular);
-				$data['children'][$key]['table'] = $relation_table;
-				$data['children'][$key]['foreign_key'] = $value;
-			}
-		}
+
 
 		// header('Content-Type: application/json');
-		// echo json_encode($data['children']);
+		// echo json_encode($data['rows']);
 		// exit;
 
-		$data['parents'] = array();
-		foreach ($data['rows'] as $key => $value) {
-			if ($this->g_migrate->endsWith($value, "_id" )) {
-				$value_singular = substr($value, 0, -3);
-				$relation_table = $this->g_migrate->grammar_plural($value_singular);
-				$data['parents'][$key]['table'] = $relation_table;
-				$data['parents'][$key]['foreign_key'] = $value;
-			}
-		}
+		$children = $this->relationships($data['rows'], "_children");
+		$parents = $this->relationships($data['rows'], "_id");
 
 
 		$this->load->view('table_header_v', $data);
@@ -54,7 +39,7 @@ class Record_c extends MY_Controller
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
-		foreach ($data['children'] as $key => $value) {
+		foreach ($children as $key => $value) {
 
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
@@ -64,13 +49,15 @@ class Record_c extends MY_Controller
 			$this->load->view('table_block_v', $data);
 		}
 
-		foreach ($data['parents'] as $key => $value) {
+		foreach ($parents as $key => $value) {
 
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 
 			$haystack = "id";
 			$overview = $this->g_tbls->fetch_where($table, $haystack, $record_id)["posts"][0];
-			$parent_id = $overview->$value['foreign_key'];
+
+			$foreign_key = $value['foreign_key'];
+			$parent_id = $overview->$foreign_key;
 			$data['table'] = $value['table'];
 			// $data["table_type"] = $value['foreign_key'];
 
@@ -83,6 +70,23 @@ class Record_c extends MY_Controller
 		}
 
 		$this->load->view('table_footer_v');
+
+	}
+
+	public function relationships($rows, $suffix)
+	{
+
+		$result = array();
+		foreach ($rows as $key => $value) {
+			if ($this->g_migrate->endsWith($value, $suffix)) {
+				$suffix_strlen = strlen($suffix);
+				$value_singular = substr($value, 0, -$suffix_strlen);
+				$relation_table = $this->g_migrate->grammar_plural($value_singular);
+				$result[$key]['table'] = $relation_table;
+				$result[$key]['foreign_key'] = $value;
+			}
+		}
+		return $result;
 
 	}
 
