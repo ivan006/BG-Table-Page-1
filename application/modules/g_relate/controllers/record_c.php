@@ -41,13 +41,14 @@ class Record_c extends MY_Controller
 
 		foreach ($children_dedicated_groups as $key => $value) {
 
-			$data['group_name'] = $value['table_singular']."_childlren";
+			$haystack = "id";
+			$needle = $overview[$value['foreign_key']];
+			$group_name_suffix = "_parent";
+			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
+			$data['group_name'] = $value['table_singular'].$group_name_suffix;
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
-			
-			$haystack = $table_singular."_id";
-			$needle = $record_id;
-			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
+
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -58,13 +59,14 @@ class Record_c extends MY_Controller
 
 		foreach ($parent_groups as $key => $value) {
 
-			$data['group_name'] = $value['table_singular']."_parent";
+			$haystack = "id";
+			$needle = $overview[$value['foreign_key']];
+			$group_name_suffix = "_parent";
+			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
+			$data['group_name'] = $value['table_singular'].$group_name_suffix;
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
 
-			$haystack = "id";
-			$needle = $overview[$value['foreign_key']];
-			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
 
 			$this->load->view('table_block_v', $data);
 		}
