@@ -28,8 +28,8 @@ class Record_c extends MY_Controller
 		// echo json_encode($data['rows']);
 		// exit;
 
-		$children = $this->relationships($data['rows'], "_children");
-		$parents = $this->relationships($data['rows'], "_id");
+		$children_types = $this->relationships($data['rows'], "_children");
+		$parent_types = $this->relationships($data['rows'], "_id");
 
 
 		$this->load->view('table_header_v', $data);
@@ -39,32 +39,28 @@ class Record_c extends MY_Controller
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
-		foreach ($children as $key => $value) {
+		foreach ($children_types as $key => $value) {
 
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
-			$data["table_type"] = $value['foreign_key'];
 			$haystack = $table_singular."_id";
+			$data["table_type"] = $value['foreign_key'];
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 			$this->load->view('table_block_v', $data);
 		}
 
-		foreach ($parents as $key => $value) {
+		$overview_haystack = "id";
+		$overview_needle = $record_id;
+		$overview = $this->g_tbls->fetch_where($table, $overview_haystack, $overview_needle)["posts"][0];
+
+		foreach ($parent_types as $key => $value) {
 
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
-
-			$haystack = "id";
-			$overview = $this->g_tbls->fetch_where($table, $haystack, $record_id)["posts"][0];
-
-			$foreign_key = $value['foreign_key'];
-			$parent_id = $overview->$foreign_key;
 			$data['table'] = $value['table'];
-			// $data["table_type"] = $value['foreign_key'];
-
+			$haystack = "id";
 			$table_singular = $this->g_migrate->grammar_singular($value['table']);
 			$data["table_type"] = $table_singular."_parent";
-
-			$haystack = "id";
+			$parent_id = $overview[$value['foreign_key']];
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
 			$this->load->view('table_block_v', $data);
 		}

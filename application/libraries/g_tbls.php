@@ -157,7 +157,7 @@ class G_tbls extends MY_Controller
 
   public function fetch_where($table, $haystack, $needle)
   {
-		$posts = $this->db->where($haystack, $needle)->get($table)->result();
+		$posts = $this->db->where($haystack, $needle)->get($table)->result_array();;
     $data = array('responce' => 'success', 'posts' => $posts);
     return $data;
   }
