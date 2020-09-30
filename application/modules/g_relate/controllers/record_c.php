@@ -22,6 +22,8 @@ class Record_c extends MY_Controller
 
 		$header["title"] = $overview_table_singular." ".$record_id;
 
+		$body["relationships"] = array();
+
 		$haystack = "id";
 		$needle = $record_id;
 		$body["overview"] = array(
@@ -33,26 +35,21 @@ class Record_c extends MY_Controller
 
 		$children_groups = $this->relationships($body["overview"]["rows"], "_children");
 
-		$body["overview"]["parent_groups"] = $this->relationships($body["overview"]["rows"], "_id");
-		$body["overview"]["child_dedi_groups"] = array();
-		$body["overview"]["child_shared_groups"] = array();
+		$body["relationships"]["parent_groups"] = $this->relationships($body["overview"]["rows"], "_id");
+		$body["relationships"]["child_dedi_groups"] = array();
+		$body["relationships"]["child_shared_groups"] = array();
 		foreach ($children_groups as $key => $value) {
 			if ($this->g_migrate->endsWith($value["table"], "_links")) {
-				$body["overview"]["child_shared_groups"][] = $value;
+				$body["relationships"]["child_shared_groups"][] = $value;
 			} else {
-				$body["overview"]["child_dedi_groups"][] = $value;
+				$body["relationships"]["child_dedi_groups"][] = $value;
 			}
 		}
 
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body["overview"]["child_shared_groups"], JSON_PRETTY_PRINT);
-		// exit;
-
-
 
 		$body["child_shared_groups"] = array();
-		foreach ($body["overview"]["child_shared_groups"] as $key => $value) {
+		foreach ($body["relationships"]["child_shared_groups"] as $key => $value) {
 
 			$haystack = $overview_table_singular."_id";
 			$needle = $record_id;
@@ -67,7 +64,7 @@ class Record_c extends MY_Controller
 		}
 
 		$body["child_dedi_groups"] = array();
-		foreach ($body["overview"]["child_dedi_groups"] as $key => $value) {
+		foreach ($body["relationships"]["child_dedi_groups"] as $key => $value) {
 
 			$haystack = $overview_table_singular."_id";
 			$needle = $record_id;
@@ -82,7 +79,7 @@ class Record_c extends MY_Controller
 		}
 
 		$body["parents"] = array();
-		foreach ($body["overview"]["parent_groups"] as $key => $value) {
+		foreach ($body["relationships"]["parent_groups"] as $key => $value) {
 
 			$haystack = "id";
 			$needle = $overview_record[$value['foreign_key']];
@@ -96,9 +93,9 @@ class Record_c extends MY_Controller
 			);
 		}
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 		$this->load->view('table_header_v', $header);
 		$this->load->view('table_block_v', $body["overview"]);
