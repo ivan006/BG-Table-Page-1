@@ -44,7 +44,8 @@ class Record_c extends MY_Controller
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
 			$haystack = $table_singular."_id";
-			$data["table_type"] = $value['foreign_key'];
+			$table_singular = $this->g_migrate->grammar_singular($value['table']);
+			$data["table_type"] = $table_singular."_childlren";
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 			$this->load->view('table_block_v', $data);
 		}
