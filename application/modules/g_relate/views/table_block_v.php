@@ -1,10 +1,10 @@
 <?php
-if (isset($table_type)) {
+if (isset($group_name)) {
   ?>
     <div class="row">
       <div class="col-md-12 mt-5">
         <h2 class="text-center">
-          <?php echo $table_type; ?>
+          <?php echo $group_name; ?>
         </h2>
         <hr style="background-color: black; color: black; height: 1px;">
       </div>

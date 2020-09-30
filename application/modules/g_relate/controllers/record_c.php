@@ -34,20 +34,20 @@ class Record_c extends MY_Controller
 
 		$this->load->view('table_header_v', $data);
 
-		$data["table_type"] = "overview";
+		$data["group_name"] = "overview";
 		$haystack = "id";
 		$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 		$this->load->view('table_block_v', $data);
 
 		foreach ($children_groups as $key => $value) {
 
-			$data = array();
-			$data['rows'] = $this->g_tbls->table_rows($value['table']);
-			$data['table'] = $value['table'];
-			$haystack = $table_singular."_id";
-			$table_singular = $this->g_migrate->grammar_singular($value['table']);
-			$data["table_type"] = $table_singular."_childlren";
-			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
+			
+			$needle = $record_id;
+			$haystack = $value['table_singular']."_id";
+			$group_name = $table_singular."_childlren";
+
+			$data = $this->table_data($value, $group_name, $needle, $haystack);
+
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -56,8 +56,13 @@ class Record_c extends MY_Controller
 		$overview_needle = $record_id;
 		$overview = $this->g_tbls->fetch_where($table, $overview_haystack, $overview_needle)["posts"][0];
 
-		foreach ($parent_groups as $key => $parent_group) {
-			$data = $this->table_data($parent_group, $overview, "id");
+		foreach ($parent_groups as $key => $value) {
+
+			$needle = $overview[$value['foreign_key']];
+			$haystack = "id";
+			$group_name = $value['table_singular']."_parent";
+
+			$data = $this->table_data($value, $group_name, $needle, $haystack);
 
 			$this->load->view('table_block_v', $data);
 		}
@@ -76,6 +81,7 @@ class Record_c extends MY_Controller
 				$value_singular = substr($value, 0, -$suffix_strlen);
 				$relation_table = $this->g_migrate->grammar_plural($value_singular);
 				$result[$key]['table'] = $relation_table;
+				$result[$key]['table_singular'] = $value_singular;
 				$result[$key]['foreign_key'] = $value;
 			}
 		}
@@ -83,18 +89,14 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function table_data($relationship_group, $overview, $suffix)
+	public function table_data($relationship_group, $group_name, $needle, $haystack)
 	{
-
 
 		$data = array();
 		$data['rows'] = $this->g_tbls->table_rows($relationship_group['table']);
 		$data['table'] = $relationship_group['table'];
-		$haystack = "id";
-		$table_singular = $this->g_migrate->grammar_singular($relationship_group['table']);
-		$data["table_type"] = $table_singular."_parent";
-		$parent_id = $overview[$relationship_group['foreign_key']];
-		$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
+		$data['group_name'] = $group_name;
+		$data["table_fetch"] = "fetch_where/h/$haystack/n/$needle";
 		return $data;
 
 	}
