@@ -114,9 +114,9 @@ class Record_c extends MY_Controller
 			);
 		}
 
-		header('Content-Type: application/json');
-		echo json_encode($body, JSON_PRETTY_PRINT);
-		exit;
+		// header('Content-Type: application/json');
+		// echo json_encode($body, JSON_PRETTY_PRINT);
+		// exit;
 
 
 		$this->load->view('table_header_v', $header);

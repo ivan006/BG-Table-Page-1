@@ -172,10 +172,6 @@ class G_tbls extends MY_Controller
 		$data = array('responce' => 'success', 'posts' => $posts);
     return $data;
 
-		// https://stackoverflow.com/questions/3492904/mysql-select-all-columns-from-one-table-and-some-from-another-table
-		// https://codeigniter.com/userguide3/database/query_builder.html
-		// https://green.bluegemify.co.za/g_relate/api/table/t/whats/fetch_where/h/id/n/1
-		// https://green.bluegemify.co.za/g_relate/api/table/t/what_when_links/fetch_join_where/t/whens/k/when_id/h/id/n/1
   }
 
 }
