@@ -23,6 +23,8 @@ class Record_c extends MY_Controller
 		$header["title"] = $overview_table_singular." ".$record_id;
 
 		$body["relationships"] = array();
+		$body["relationships"]["overview"]["table"] = $table;
+		$body["relationships"]["overview"]["table_singular"] = $overview_table_singular;
 
 		$haystack = "id";
 		$needle = $record_id;
@@ -55,19 +57,28 @@ class Record_c extends MY_Controller
 			$needle = $record_id;
 			$group_name_suffix = "_shared_children";
 
-			$body["child_shared_groups"][$key] = array(
-				"table_fetch" => "fetch_where/h/$haystack/n/$needle",
-				"group_name" => $value['table_singular'].$group_name_suffix,
+
+			$body["child_shared_groups"][$key]["linking"] = array(
 				"rows" => $this->g_tbls->table_rows($value['table']),
 				"table" => $value['table'],
 			);
-
-			// $body["child_shared_groups"][$key]["rows"];
 
 			$body["child_shared_groups"][$key]["lookup"] = array(
 				"rows" => $this->g_tbls->table_rows($value['table']),
 				"table" => $value['table'],
 			);
+
+			$body["child_shared_groups"][$key]["join"] = array(
+				"rows" => "",
+			);
+
+			$body["child_shared_groups"][$key]["linking"]["rows"];
+			$body["overview"]["table"];
+
+			$body["relationships"]["overview"]["table_singular"];
+			$body["relationships"]["overview"]["table"];
+			$body["child_shared_groups"][$key]["table_fetch"] = "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle";
+			$body["child_shared_groups"][$key]["group_name"] = $value['table_singular'].$group_name_suffix;
 		}
 
 		$body["child_dedi_groups"] = array();
