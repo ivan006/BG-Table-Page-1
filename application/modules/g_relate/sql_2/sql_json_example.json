@@ -1,0 +1,27 @@
+{
+    "trips": {
+        "id": {
+						"type": "BIGINT",
+						"collation": "UNSIGNED",
+						"null": "NOT NULL",
+						"a_i": "AUTO_INCREMENT"
+        },
+				"title": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				},
+				"description": {
+					"type": "text"
+				},
+				"priority": {
+					"type": "smallint",
+					"default": "DEFAULT 0",
+					"null": "NOT NULL"
+				},
+				"created": {
+					"type": "DATETIME",
+					"null": "NULL"
+				}
+    },
+}

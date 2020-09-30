@@ -27,16 +27,22 @@ class Record_c extends MY_Controller
 			if ($this->g_migrate->endsWith($value, "_children" )) {
 				$value_singular = substr($value, 0, -9);
 				$relation_table = $this->g_migrate->grammar_plural($value_singular);
-				$data['children'][$value] = $relation_table;
+				$data['children'][$key]['table'] = $relation_table;
+				$data['children'][$key]['foreign_key'] = $value;
 			}
 		}
+
+		// header('Content-Type: application/json');
+		// echo json_encode($data['children']);
+		// exit;
 
 		$data['parents'] = array();
 		foreach ($data['rows'] as $key => $value) {
 			if ($this->g_migrate->endsWith($value, "_id" )) {
 				$value_singular = substr($value, 0, -3);
 				$relation_table = $this->g_migrate->grammar_plural($value_singular);
-				$data['parents'][$value] = $relation_table;
+				$data['parents'][$key]['table'] = $relation_table;
+				$data['parents'][$key]['foreign_key'] = $value;
 			}
 		}
 
@@ -50,9 +56,9 @@ class Record_c extends MY_Controller
 
 		foreach ($data['children'] as $key => $value) {
 
-			$data['rows'] = $this->g_tbls->table_rows($value);
-			$data['table'] = $value;
-			$data["table_type"] = $key;
+			$data['rows'] = $this->g_tbls->table_rows($value['table']);
+			$data['table'] = $value['table'];
+			$data["table_type"] = $value['foreign_key'];
 			$haystack = $table_singular."_id";
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
 			$this->load->view('table_block_v', $data);
@@ -60,15 +66,15 @@ class Record_c extends MY_Controller
 
 		foreach ($data['parents'] as $key => $value) {
 
-			$data['rows'] = $this->g_tbls->table_rows($value);
+			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 
 			$haystack = "id";
 			$overview = $this->g_tbls->fetch_where($table, $haystack, $record_id)["posts"][0];
-			$parent_id = $overview->$key;
-			$data['table'] = $value;
-			// $data["table_type"] = $key;
+			$parent_id = $overview->$value['foreign_key'];
+			$data['table'] = $value['table'];
+			// $data["table_type"] = $value['foreign_key'];
 
-			$table_singular = $this->g_migrate->grammar_singular($value);
+			$table_singular = $this->g_migrate->grammar_singular($value['table']);
 			$data["table_type"] = $table_singular."_parent";
 
 			$haystack = "id";

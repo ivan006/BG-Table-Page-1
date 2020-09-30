@@ -1,0 +1,130 @@
+{
+    "payment_methods": {
+        "payment_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "payments": {
+        "payment_method_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "events": {
+        "payment_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "attendee_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "product_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "fee_schedule_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "employee_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "attendees": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "product_types": {
+        "product_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "products": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "fee_schedule_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "product_type_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "employee_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "fee_schedules": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "product_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    },
+    "employees": {
+        "event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "product_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+				"name": {
+					"type": "character varying",
+					"length": "(100)",
+					"null": "NOT NULL"
+				}
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "payment_methods": [
+      "payments"
+    ],
+    "payments": [
+    ],
+    "events": [
+      "payments"
+    ],
+    "attendees": [
+      "events"
+    ],
+    "product_types": [
+      "products"
+    ],
+    "products": [
+      "events",
+      "fee_schedules"
+    ],
+    "fee_schedules": [
+      "events"
+    ],
+    "employees": [
+      "events",
+      "products"
+    ]
+}
