@@ -41,12 +41,14 @@ class Record_c extends MY_Controller
 
 		foreach ($children_types as $key => $value) {
 
+			$data = array();
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
 			$data['table'] = $value['table'];
 			$haystack = $table_singular."_id";
 			$table_singular = $this->g_migrate->grammar_singular($value['table']);
 			$data["table_type"] = $table_singular."_childlren";
 			$data["table_fetch"] = "fetch_where/h/$haystack/n/$record_id";
+
 			$this->load->view('table_block_v', $data);
 		}
 
@@ -54,15 +56,9 @@ class Record_c extends MY_Controller
 		$overview_needle = $record_id;
 		$overview = $this->g_tbls->fetch_where($table, $overview_haystack, $overview_needle)["posts"][0];
 
-		foreach ($parent_types as $key => $value) {
+		foreach ($parent_types as $key => $parent_type) {
+			$data = $this->table_data($parent_type, $overview, "id");
 
-			$data['rows'] = $this->g_tbls->table_rows($value['table']);
-			$data['table'] = $value['table'];
-			$haystack = "id";
-			$table_singular = $this->g_migrate->grammar_singular($value['table']);
-			$data["table_type"] = $table_singular."_parent";
-			$parent_id = $overview[$value['foreign_key']];
-			$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
 			$this->load->view('table_block_v', $data);
 		}
 
@@ -84,6 +80,22 @@ class Record_c extends MY_Controller
 			}
 		}
 		return $result;
+
+	}
+
+	public function table_data($parent_type, $overview, $suffix)
+	{
+
+
+		$data = array();
+		$data['rows'] = $this->g_tbls->table_rows($parent_type['table']);
+		$data['table'] = $parent_type['table'];
+		$haystack = "id";
+		$table_singular = $this->g_migrate->grammar_singular($parent_type['table']);
+		$data["table_type"] = $table_singular."_parent";
+		$parent_id = $overview[$parent_type['foreign_key']];
+		$data["table_fetch"] = "fetch_where/h/$haystack/n/$parent_id";
+		return $data;
 
 	}
 
