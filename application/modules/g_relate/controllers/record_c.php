@@ -33,6 +33,7 @@ class Record_c extends MY_Controller
 
 		$children_groups = $this->relationships($body["overview"]["rows"], "_children");
 
+		$body["overview"]["parent_groups"] = $this->relationships($body["overview"]["rows"], "_id");
 		$body["overview"]["child_dedi_groups"] = array();
 		$body["overview"]["child_shared_groups"] = array();
 		foreach ($children_groups as $key => $value) {
@@ -42,7 +43,11 @@ class Record_c extends MY_Controller
 				$body["overview"]["child_dedi_groups"][] = $value;
 			}
 		}
-		$body["overview"]["parent_groups"] = $this->relationships($body["overview"]["rows"], "_id");
+
+
+		// header('Content-Type: application/json');
+		// echo json_encode($body["overview"]["child_shared_groups"], JSON_PRETTY_PRINT);
+		// exit;
 
 
 
@@ -60,9 +65,6 @@ class Record_c extends MY_Controller
 				"table" => $value['table'],
 			);
 		}
-		// header('Content-Type: application/json');
-		// echo json_encode($body["overview"]["child_shared_groups"], JSON_PRETTY_PRINT);
-		// exit;
 
 		$body["child_dedi_groups"] = array();
 		foreach ($body["overview"]["child_dedi_groups"] as $key => $value) {
