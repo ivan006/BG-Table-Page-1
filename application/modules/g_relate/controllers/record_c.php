@@ -41,9 +41,10 @@ class Record_c extends MY_Controller
 
 		foreach ($children_dedicated_groups as $key => $value) {
 
-			$haystack = "id";
-			$needle = $overview[$value['foreign_key']];
-			$group_name_suffix = "_parent";
+			$haystack = $table_singular."_id";
+			$needle = $record_id;
+			$group_name_suffix = "_childlren";
+
 			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
 			$data['group_name'] = $value['table_singular'].$group_name_suffix;
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
@@ -62,6 +63,7 @@ class Record_c extends MY_Controller
 			$haystack = "id";
 			$needle = $overview[$value['foreign_key']];
 			$group_name_suffix = "_parent";
+
 			$data['table_fetch'] = $this->fetch_request($needle, $haystack);
 			$data['group_name'] = $value['table_singular'].$group_name_suffix;
 			$data['rows'] = $this->g_tbls->table_rows($value['table']);
