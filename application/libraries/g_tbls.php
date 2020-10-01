@@ -157,8 +157,12 @@ class G_tbls extends MY_Controller
     $row_query = implode(" ", $row_query);
     $result = $this->db->query($row_query)->result_array();
     $result = array_column($result, 'Tables_in_greenbluegpyuty_db5');
+		foreach ($result as $key => $value) {
+			$post[]["name"] = $value;
+		}
 
-    return $result;
+		$data = array('responce' => 'success', 'posts' => $post);
+		return $data;
   }
 
   public function fetch_where($table, $haystack, $needle)
@@ -168,15 +172,17 @@ class G_tbls extends MY_Controller
     return $data;
   }
 
-  public function fetch_join_where($table_1, $table_2)
+  public function fetch_join_where($table_1, $table_2, $haystack,$needle)
   {
 
 		// $posts = $this->db->select('*')->where($haystack, $needle)->from($table_1)->join($table_2, "$table_1.$table_2_key = $table_2.id")->get()->result_array();
-		$key = $this->g_migrate->grammar_singular($table_2);
-		$key = $key."_id";
+		$table_2_singular = $this->g_migrate->grammar_singular($table_2);
+		$table_2_singular = $table_2_singular."_id";
+		// $table_1_singular = $this->g_migrate->grammar_singular($table_1);
+		// $haystack = $table_1_singular.".".$haystack;
 
 
-		$posts = $this->db->select('*')->from($table_2)->join($table_1, "$table_1.$key = $table_2.id")->get()->result_array();
+		$posts = $this->db->select('*')->where($haystack, $needle)->from($table_2)->join($table_1, "$table_1.$table_2_singular = $table_2.id", "right")->get()->result_array();
 
 		$data = array('responce' => 'success', 'posts' => $posts);
     return $data;

@@ -15,9 +15,16 @@ class Table_c extends MY_Controller
 
 	public function index($g_tbls_table)
 	{
-		$data["rows"] = $this->g_tbls->table_rows($g_tbls_table);
+		$data["rows"]["all"] = $this->g_tbls->table_rows($g_tbls_table);
+		$data["rows"]["visible"] = array();
+		foreach ($data["rows"]["all"] as $key => $value) {
+			// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["singular"]."_id" !== $join_merge_key) {
+			if (!$this->g_migrate->endsWith($key, "_children")) {
+				$data["rows"]["visible"][$key] = $value;
+			}
+		}
 		$data["name"]["plural"] = $g_tbls_table;
-		$data["data"]["data_endpoint"] = $g_tbls_table."/fetch";
+		$data["data_endpoint"] = $g_tbls_table."/fetch";
 		$data['title'] = $g_tbls_table;
 		$this->load->view('table_header_v', $data);
 		$this->load->view('table_block_v', $data);
@@ -46,9 +53,9 @@ class Table_c extends MY_Controller
 		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
-	public function fetch_join_where($table_1, $table_2)
+	public function fetch_join_where($table_1, $table_2, $haystack, $needle)
 	{
-		$result = $this->g_tbls->fetch_join_where($table_1, $table_2);
+		$result = $this->g_tbls->fetch_join_where($table_1, $table_2, $haystack, $needle);
 		header('Content-Type: application/json');
 		echo json_encode($result, JSON_PRETTY_PRINT);
 	}

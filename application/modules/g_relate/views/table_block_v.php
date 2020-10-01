@@ -2,13 +2,13 @@
 
 <?php
 if (isset($join)) {
-  $editable_rows = $rows;
-  $readable_rows = $join["rows"];
+  $editable_rows = $rows["visible"];
+  $readable_rows = $join["rows"]["visible"];
   $data_endpoint = $join["data_endpoint"];
   $name["singular"] = $join["name"]["singular"];
 } else {
-  $editable_rows = $rows;
-  $readable_rows = $rows;
+  $editable_rows = $rows["visible"];
+  $readable_rows = $rows["visible"];
 
 }
 ?>

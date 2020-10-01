@@ -1,0 +1,28 @@
+{
+  "whats": [
+    "what_how_links",
+    "what_when_links",
+    "what_where_links",
+    "what_who_links"
+  ],
+  "hows": [
+    "what_how_links"
+  ],
+  "whens": [
+    "what_when_links"
+  ],
+  "wheres": [
+    "what_where_links"
+  ],
+  "whos": [
+    "what_who_links"
+  ],
+  "what_how_links": [
+  ],
+  "what_when_links": [
+  ],
+  "what_where_links": [
+  ],
+  "what_who_links": [
+  ]
+}

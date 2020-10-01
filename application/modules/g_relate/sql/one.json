@@ -1,28 +1,22 @@
 {
-  "whats": [
-    "what_how_links",
-    "what_when_links",
-    "what_where_links",
-    "what_who_links"
+  "events": [
+    "event_resource_links",
+    "event_place_links",
+    "event_person_links"
   ],
-  "hows": [
-    "what_how_links"
+  "resources": [
+    "event_resource_links"
   ],
-  "whens": [
-    "what_when_links"
+  "places": [
+    "event_place_links"
   ],
-  "wheres": [
-    "what_where_links"
+  "persons": [
+    "event_person_links"
   ],
-  "whos": [
-    "what_who_links"
+  "event_resource_links": [
   ],
-  "what_how_links": [
+  "event_place_links": [
   ],
-  "what_when_links": [
-  ],
-  "what_where_links": [
-  ],
-  "what_who_links": [
+  "event_person_links": [
   ]
 }

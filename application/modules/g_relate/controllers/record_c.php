@@ -45,7 +45,7 @@ class Record_c extends MY_Controller
 		$this->load->view('table_header_v', $header);
 		$this->load->view('table_block_v', $body);
 
-		foreach ($body["rows"] as $key => $value) {
+		foreach ($body["rows"]["all"] as $key => $value) {
 			if (!empty($value)) {
 				// code...
 				$this->load->view('table_block_v', $value);
@@ -88,10 +88,18 @@ class Record_c extends MY_Controller
 					}
 
 
-					$name["type"] = "parent";
-					$sub_rows = $this->g_tbls->table_rows($name["plural"]);
+					$name["type"] = "owner";
+					$sub_rows["all"] = $this->g_tbls->table_rows($name["plural"]);
 
-					$rows[$key] = array(
+					$sub_rows["visible"] = array();
+					foreach ($sub_rows["all"] as $sub_rows_key => $sub_rows_value) {
+						// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["singular"]."_id" !== $join_merge_key) {
+						if (!$this->g_migrate->endsWith($sub_rows_key, "_children")) {
+							$sub_rows["visible"][$sub_rows_key] = $sub_rows_value;
+						}
+					}
+
+					$result["all"][$key] = array(
 						"name" => $name,
 						"rows" => $sub_rows,
 						"data_endpoint" => $data_endpoint,
@@ -117,8 +125,8 @@ class Record_c extends MY_Controller
 							$data_endpoint = "";
 						}
 
-						$name["type"] = "shared_children";
-						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
+						$name["type"] = "reusable_item";
+						// $sub_rows = $this->g_tbls->table_rows($name["plural"]);
 
 						$record = array();
 						$dont_scan = $parent_name["singular"]."_id";
@@ -127,10 +135,9 @@ class Record_c extends MY_Controller
 
 
 
-
 						$lookup_table = array();
 						$rel_rows = array();
-						foreach ($sub_rows as $sub_row_key => $sub_row_value) {
+						foreach ($sub_rows["all"] as $sub_row_key => $sub_row_value) {
 							if (!empty($sub_row_value)) {
 								$rel_rows[] = $sub_row_value;
 							}
@@ -140,7 +147,7 @@ class Record_c extends MY_Controller
 						}
 
 						$join["lookup"] = $lookup_table;
-						$join_merge = array_merge(array_keys($lookup_table["rows"]), array_keys($sub_rows));
+						$join_merge = array_merge(array_keys($lookup_table["rows"]["all"]), array_keys($sub_rows["all"]));
 						$join_merge = array_unique($join_merge);
 						$join_merge = array_flip($join_merge);
 						foreach ($join_merge as $join_merge_key => $join_merge_value) {
@@ -148,11 +155,20 @@ class Record_c extends MY_Controller
 						}
 
 						// $join["join"] = $join_merge;
-						$join["data_endpoint"] = "fetch_join_where/t/".$lookup_table["name"]["plural"];
-						$join["rows"] = $join_merge;
+						$join["data_endpoint"] = "fetch_join_where/t/".$lookup_table["name"]["plural"]."\/h/".$parent_name["singular"]."_id/n/".$parent_record["id"];
+
+						$join["rows"]["visible"] = array();
+						foreach ($join_merge as $join_merge_key => $join_merge_value) {
+							// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["singular"]."_id" !== $join_merge_key) {
+							if (!$this->g_migrate->endsWith($join_merge_key, "_children")) {
+								$join["rows"]["visible"][$join_merge_key] = $join_merge_value;
+							}
+						}
+
+						$join["rows"]["all"] = $join_merge;
 						$join["name"] = $lookup_table["name"];
 
-						$rows[$key] = array(
+						$result["all"][$key] = array(
 							"name" => $name,
 							"rows" => $sub_rows,
 							"data_endpoint" => $data_endpoint,
@@ -174,12 +190,21 @@ class Record_c extends MY_Controller
 						} else {
 							$data_endpoint = "";
 						}
-						$name["type"] = "dedicated_children";
-						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
+						$name["type"] = "dedicated_item";
+
+						$sub_rows["all"] = $this->g_tbls->table_rows($name["plural"]);
+
+						$sub_rows["visible"] = array();
+						foreach ($sub_rows["all"] as $sub_rows_key => $sub_rows_value) {
+							// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["singular"]."_id" !== $join_merge_key) {
+							if (!$this->g_migrate->endsWith($sub_rows_key, "_children")) {
+								$sub_rows["visible"][$sub_rows_key] = $sub_rows_value;
+							}
+						}
 
 
 
-						$rows[$key] = array(
+						$result["all"][$key] = array(
 						"name" => $name,
 						"rows" => $sub_rows,
 						"data_endpoint" => $data_endpoint,
@@ -188,11 +213,19 @@ class Record_c extends MY_Controller
 					}
 				}
 			} else {
-				$rows[$key] = array();
+				$result["all"][$key] = array();
 			}
 		}
 
-		return $rows;
+		$result["visible"] = array();
+		foreach ($rows as $key => $value) {
+			// if (!$this->g_migrate->endsWith($key, "_children") && $parent_name["singular"]."_id" !== $key) {
+			if (!$this->g_migrate->endsWith($key, "_children")) {
+				$result["visible"][$key] = $value;
+			}
+		}
+
+		return $result;
 
 	}
 

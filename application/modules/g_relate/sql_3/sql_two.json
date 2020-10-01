@@ -1,0 +1,129 @@
+{
+    "whats": {
+        "what_how_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "what_when_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "what_where_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "what_who_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "hows": {
+        "what_how_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "what_how_links": {
+        "what_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "how_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "whens": {
+        "what_when_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "what_when_links": {
+        "what_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "when_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "wheres": {
+        "what_where_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "what_where_links": {
+        "what_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "where_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "whos": {
+        "what_who_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "what_who_links": {
+        "what_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "who_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    }
+}
