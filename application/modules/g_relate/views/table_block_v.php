@@ -2,9 +2,14 @@
 
 <?php
 if (isset($join)) {
-  $rows = $join["rows"];
+  $editable_rows = $rows;
+  $readable_rows = $join["rows"];
   $data_endpoint = $join["data_endpoint"];
   $name["singular"] = $join["name"]["singular"];
+} else {
+  $editable_rows = $rows;
+  $readable_rows = $rows;
+
 }
 ?>
 
@@ -44,7 +49,7 @@ if (isset($name["type"])) {
             <!-- Add Records Form -->
             <form action="" method="post" id="<?php echo $name["plural"]; ?>_form">
               <?php
-              foreach ($rows as $key => $value) {
+              foreach ($editable_rows as $key => $value) {
                 if ($key !== "id") {
                   ?>
                   <div class="form-group">
@@ -82,7 +87,7 @@ if (isset($name["type"])) {
           <tr>
             <th>ID</th>
             <?php
-            foreach ($rows as $key => $value) {
+            foreach ($readable_rows as $key => $value) {
               if ($key !== "id") {
                 ?>
                 <th><?php echo $key; ?></th>
@@ -116,7 +121,7 @@ if (isset($name["type"])) {
         <form action="" method="post" id="<?php echo $name["plural"]; ?>_edit_form">
           <input type="hidden" id="<?php echo $name["plural"]; ?>_edit_record_id" name="edit_record_id" value="">
           <?php
-          foreach ($rows as $key => $value) {
+          foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
               <div class="form-group">
@@ -151,7 +156,7 @@ if (isset($name["type"])) {
     e.preventDefault();
 
     <?php
-    foreach ($rows as $key => $value) {
+    foreach ($editable_rows as $key => $value) {
       if ($key !== "id") {
         ?>
         var <?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_<?php echo $key; ?>").val();
@@ -172,7 +177,7 @@ if (isset($name["type"])) {
         dataType: "json",
         data: {
           <?php
-          foreach ($rows as $key => $value) {
+          foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
               <?php echo $key; ?>: <?php echo $key; ?>,
@@ -228,7 +233,7 @@ if (isset($name["type"])) {
               return a = i++;
             } },
             <?php
-            foreach ($rows as $key => $value) {
+            foreach ($readable_rows as $key => $value) {
               if ($key !== "id") {
                 ?>
                 { "data": "<?php echo $key; ?>" },
@@ -347,7 +352,7 @@ if (isset($name["type"])) {
           $('#<?php echo $name["plural"]; ?>_edit_modal').modal('show');
           $("#<?php echo $name["plural"]; ?>_edit_record_id").val(data.post.id);
           <?php
-          foreach ($rows as $key => $value) {
+          foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
               $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
@@ -372,7 +377,7 @@ if (isset($name["type"])) {
 
     var edit_record_id = $("#<?php echo $name["plural"]; ?>_edit_record_id").val();
     <?php
-    foreach ($rows as $key => $value) {
+    foreach ($editable_rows as $key => $value) {
       if ($key !== "id") {
         ?>
         var edit_<?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val();
@@ -395,7 +400,7 @@ if (isset($name["type"])) {
         data: {
           edit_record_id: edit_record_id,
           <?php
-          foreach ($rows as $key => $value) {
+          foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
               edit_<?php echo $key; ?>: edit_<?php echo $key; ?>,
