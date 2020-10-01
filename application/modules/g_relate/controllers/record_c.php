@@ -23,98 +23,86 @@ class Record_c extends MY_Controller
 		$header["title"] = $overview_table_singular." ".$record_id;
 
 		$body = array();
-		$body["overview"]["plural"] = $table;
-		$body["overview"]["singular"] = $overview_table_singular;
+		$body["plural"] = $table;
+		$body["singular"] = $overview_table_singular;
 
 		$haystack = "id";
 		$needle = $record_id;
-		$body["overview"]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-		$body["overview"]["relation"] = "overview";
-		$body["overview"]["rows"] = $this->g_tbls->table_rows($table);
+		$body["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+		$body["relation"] = "overview";
+		$body["rows"] = $this->g_tbls->table_rows($table);
 
 
-		$suffix = "_id";
-		$body["parent"] = array();
-		foreach ($body["overview"]["rows"] as $key => $value) {
+
+		foreach ($body["rows"] as $key => $value) {
+
+			$suffix = "_id";
 			if ($this->g_migrate->endsWith($key, $suffix)) {
-				$body["parent"][$key]["singular"] = $this->suffix_remover($key, $suffix);
-				$body["parent"][$key]["plural"] = $this->g_migrate->grammar_plural($body["parent"][$key]["singular"]);
-			}
-		}
+				$body["rows"][$key]["singular"] = $this->suffix_remover($key, $suffix);
+				$body["rows"][$key]["plural"] = $this->g_migrate->grammar_plural($body["rows"][$key]["singular"]);
 
-		$children_groups = array();
-		$suffix = "_children";
-		foreach ($body["overview"]["rows"] as $key => $value) {
+
+				$haystack = "id";
+				$needle = $overview_record[$value["singular"]."_id"];
+
+
+				$body["rows"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+				$body["rows"][$key]["relation"] = "parent";
+				$body["rows"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
+
+
+			}
+			$suffix = "_children";
 			if ($this->g_migrate->endsWith($key, $suffix)) {
-				$children_groups[$key]["singular"] = $this->suffix_remover($key, $suffix);
-				$children_groups[$key]["plural"] = $this->g_migrate->grammar_plural($children_groups[$key]["singular"]);
+
+				$body["rows"][$key]["singular"] = $this->suffix_remover($key, $suffix);
+				$body["rows"][$key]["plural"] = $this->g_migrate->grammar_plural($body["rows"][$key]["singular"]);
+
+				if ($this->g_migrate->endsWith($body["rows"][$key]["plural"], "_links")) {
+
+
+					$haystack = $body["singular"]."_id";
+					$needle = $record_id;
+
+					$body["rows"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+					$body["rows"][$key]["relation"] = "shared_children";
+					$body["rows"][$key]["rows"] = $this->g_tbls->table_rows($body["rows"][$key]["plural"]);
+
+					$join_singular = $body["rows"][$key]["rows"];
+					unset($join_singular["id"]);
+					unset($join_singular[$body["singular"]."_id"]);
+
+
+
+					// header('Content-Type: application/json');
+					// echo json_encode($join_singular, JSON_PRETTY_PRINT);
+					// exit;
+
+					$body["rows"][$key]["join"] = array(
+						"linking" => "",
+						"lookup" => "",
+						"" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
+					);
+
+
+
+					$body["rows"][$key]["rows"] = $this->g_tbls->table_rows($body["rows"][$key]["plural"]);
+
+
+				} else {
+
+					$haystack = $body["singular"]."_id";
+					$needle = $record_id;
+
+					$body["rows"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+					$body["rows"][$key]["relation"] = "dedicated_children";
+					$body["rows"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
+				}
 			}
 		}
 
-		$body["dedicated_children"] = array();
-		$body["shared_children"] = array();
-		foreach ($children_groups as $key => $value) {
-			if ($this->g_migrate->endsWith($value["plural"], "_links")) {
-				$body["shared_children"][$key] = $value;
-			} else {
-				$body["dedicated_children"][$key] = $value;
-			}
-		}
 
 
-
-		foreach ($body["shared_children"] as $key => $value) {
-
-
-			$haystack = $body["overview"]["singular"]."_id";
-			$needle = $record_id;
-
-			$body["shared_children"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-			$body["shared_children"][$key]["relation"] = "shared_children";
-			$body["shared_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
-
-			$join_singular = $body["shared_children"][$key]["rows"];
-			unset($join_singular["id"]);
-			unset($join_singular[$body["overview"]["singular"]."_id"]);
-
-
-
-			// header('Content-Type: application/json');
-			// echo json_encode($join_singular, JSON_PRETTY_PRINT);
-			// exit;
-
-			$body["shared_children"][$key]["join"] = array(
-				"linking" => "",
-				"lookup" => "",
-				"" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
-			);
-
-
-
-			$body["shared_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
-
-		}
-
-		foreach ($body["dedicated_children"] as $key => $value) {
-
-			$haystack = $body["overview"]["singular"]."_id";
-			$needle = $record_id;
-
-			$body["dedicated_children"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-			$body["dedicated_children"][$key]["relation"] = "dedicated_children";
-			$body["dedicated_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
-		}
-
-		foreach ($body["parent"] as $key => $value) {
-
-			$haystack = "id";
-			$needle = $overview_record[$value["singular"]."_id"];
-
-
-			$body["parent"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-			$body["parent"][$key]["relation"] = "parent";
-			$body["parent"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
-		}
 
 		header('Content-Type: application/json');
 		echo json_encode($body, JSON_PRETTY_PRINT);
@@ -122,16 +110,13 @@ class Record_c extends MY_Controller
 
 
 		$this->load->view('table_header_v', $header);
-		$this->load->view('table_block_v', $body["overview"]);
+		$this->load->view('table_block_v', $body);
 
-		foreach ($body["dedicated_children"] as $key => $value) {
-			$this->load->view('table_block_v', $value);
-		}
-		foreach ($body["shared_children"] as $key => $value) {
-			$this->load->view('table_block_v', $value);
-		}
-		foreach ($body["parent"] as $key => $value) {
-			$this->load->view('table_block_v', $value);
+		foreach ($body["rows"] as $key => $value) {
+			if (!empty($value)) {
+				// code...
+				$this->load->view('table_block_v', $value);
+			}
 		}
 		$this->load->view('table_footer_v');
 
