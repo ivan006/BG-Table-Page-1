@@ -16,8 +16,8 @@ class Table_c extends MY_Controller
 	public function index($g_tbls_table)
 	{
 		$data["rows"] = $this->g_tbls->table_rows($g_tbls_table);
-		$data["plural"] = $g_tbls_table;
-		$data["data_endpoint"] = $g_tbls_table."/fetch";
+		$data["name"]["plural"] = $g_tbls_table;
+		$data["data"]["data_endpoint"] = $g_tbls_table."/fetch";
 		$data['title'] = $g_tbls_table;
 		$this->load->view('table_header_v', $data);
 		$this->load->view('table_block_v', $data);

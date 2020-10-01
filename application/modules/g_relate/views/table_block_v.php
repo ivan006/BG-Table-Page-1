@@ -1,10 +1,10 @@
 <?php
-if (isset($relation)) {
+if (isset($name["type"])) {
   ?>
     <div class="row">
       <div class="col-md-12 mt-5">
         <h2 class="text-center">
-          <?php echo $singular."_(".$relation.")"; ?>
+          <?php echo $name["singular"]."_(".$name["type"].")"; ?>
         </h2>
         <hr style="background-color: black; color: black; height: 1px;">
       </div>
@@ -16,30 +16,30 @@ if (isset($relation)) {
   <div class="col-md-12 mt-2">
     <!-- Add Records Modal -->
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#<?php echo $plural; ?>_exampleModal">
+    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#<?php echo $name["plural"]; ?>_exampleModal">
       Add Records
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="<?php echo $plural; ?>_exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="<?php echo $name["plural"]; ?>_exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="<?php echo $plural; ?>_exampleModalLabel">Add Records</h5>
+            <h5 class="modal-title" id="<?php echo $name["plural"]; ?>_exampleModalLabel">Add Records</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <!-- Add Records Form -->
-            <form action="" method="post" id="<?php echo $plural; ?>_form">
+            <form action="" method="post" id="<?php echo $name["plural"]; ?>_form">
               <?php
               foreach ($rows as $key => $value) {
                 if ($key !== "id") {
                   ?>
                   <div class="form-group">
                     <label for=""><?php echo $key; ?></label>
-                    <input type="<?php echo $key; ?>" id="<?php echo $plural; ?>_<?php echo $key; ?>" class="form-control">
+                    <input type="<?php echo $key; ?>" id="<?php echo $name["plural"]; ?>_<?php echo $key; ?>" class="form-control">
                   </div>
                   <?php
                 }
@@ -47,17 +47,17 @@ if (isset($relation)) {
               ?>
               <!-- <div class="form-group"> -->
               <!-- <label for="">Name</label> -->
-              <!-- <input type="text" id="<?php echo $plural; ?>_name" class="form-control"> -->
+              <!-- <input type="text" id="<?php echo $name["plural"]; ?>_name" class="form-control"> -->
               <!-- </div> -->
               <!-- <div class="form-group"> -->
               <!-- <label for="">Event_children</label> -->
-              <!-- <input type="event_children" id="<?php echo $plural; ?>_event_children" class="form-control"> -->
+              <!-- <input type="event_children" id="<?php echo $name["plural"]; ?>_event_children" class="form-control"> -->
               <!-- </div> -->
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="<?php echo $plural; ?>_add">Add Records</button>
+            <button type="button" class="btn btn-primary" id="<?php echo $name["plural"]; ?>_add">Add Records</button>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@ if (isset($relation)) {
 <div class="row">
   <div class="col-md-12 mt-4">
     <div class="table-responsive">
-      <table class="table" id="<?php echo $plural; ?>_records">
+      <table class="table" id="<?php echo $name["plural"]; ?>_records">
         <thead>
           <tr>
             <th>ID</th>
@@ -92,26 +92,26 @@ if (isset($relation)) {
 
 
 <!-- Edit Record Modal -->
-<div class="modal fade" id="<?php echo $plural; ?>_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="<?php echo $name["plural"]; ?>_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="<?php echo $plural; ?>_exampleModalLabel">Edit Record Modal</h5>
+        <h5 class="modal-title" id="<?php echo $name["plural"]; ?>_exampleModalLabel">Edit Record Modal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <!-- Edit Record Form -->
-        <form action="" method="post" id="<?php echo $plural; ?>_edit_form">
-          <input type="hidden" id="<?php echo $plural; ?>_edit_record_id" name="edit_record_id" value="">
+        <form action="" method="post" id="<?php echo $name["plural"]; ?>_edit_form">
+          <input type="hidden" id="<?php echo $name["plural"]; ?>_edit_record_id" name="edit_record_id" value="">
           <?php
           foreach ($rows as $key => $value) {
             if ($key !== "id") {
               ?>
               <div class="form-group">
                 <label for=""><?php echo $key; ?></label>
-                <input type="<?php echo $key; ?>" id="<?php echo $plural; ?>_edit_<?php echo $key; ?>" class="form-control">
+                <input type="<?php echo $key; ?>" id="<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>" class="form-control">
               </div>
               <?php
             }
@@ -119,17 +119,17 @@ if (isset($relation)) {
           ?>
           <!-- <div class="form-group">
             <label for="">Name</label>
-            <input type="text" id="<?php echo $plural; ?>_edit_name" class="form-control">
+            <input type="text" id="<?php echo $name["plural"]; ?>_edit_name" class="form-control">
           </div>
           <div class="form-group">
             <label for="">Event_children</label>
-            <input type="event_children" id="<?php echo $plural; ?>_edit_event_children" class="form-control">
+            <input type="event_children" id="<?php echo $name["plural"]; ?>_edit_event_children" class="form-control">
           </div> -->
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="<?php echo $plural; ?>_update">Update</button>
+        <button type="button" class="btn btn-primary" id="<?php echo $name["plural"]; ?>_update">Update</button>
       </div>
     </div>
   </div>
@@ -137,27 +137,27 @@ if (isset($relation)) {
 
 <!-- Add Records -->
 <script>
-  $(document).on("click", "#<?php echo $plural; ?>_add", function(e){
+  $(document).on("click", "#<?php echo $name["plural"]; ?>_add", function(e){
     e.preventDefault();
 
     <?php
     foreach ($rows as $key => $value) {
       if ($key !== "id") {
         ?>
-        var <?php echo $key; ?> = $("#<?php echo $plural; ?>_<?php echo $key; ?>").val();
+        var <?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_<?php echo $key; ?>").val();
         <?php
       }
     }
     ?>
-    // var name = $("#<?php echo $plural; ?>_name").val();
-    // var event_children = $("#<?php echo $plural; ?>_event_children").val();
+    // var name = $("#<?php echo $name["plural"]; ?>_name").val();
+    // var event_children = $("#<?php echo $name["plural"]; ?>_event_children").val();
 
     // if (name == "")
     if (1 !== 1) {
       alert("Both field is required");
     }else{
       $.ajax({
-        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $plural; ?>/insert",
+        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/insert",
         type: "post",
         dataType: "json",
         data: {
@@ -175,9 +175,9 @@ if (isset($relation)) {
         },
         success: function(data){
           if (data.responce == "success") {
-            $('#<?php echo $plural; ?>_records').DataTable().destroy();
-            <?php echo $plural; ?>_fetch();
-            $('#<?php echo $plural; ?>_exampleModal').modal('hide');
+            $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
+            <?php echo $name["plural"]; ?>_fetch();
+            $('#<?php echo $name["plural"]; ?>_exampleModal').modal('hide');
             toastr["success"](data.message);
           }else{
             toastr["error"](data.message);
@@ -186,7 +186,7 @@ if (isset($relation)) {
         }
       });
 
-      $("#<?php echo $plural; ?>_form")[0].reset();
+      $("#<?php echo $name["plural"]; ?>_form")[0].reset();
 
     }
 
@@ -194,16 +194,16 @@ if (isset($relation)) {
 
   // Fetch Records
 
-  function <?php echo $plural; ?>_fetch(){
+  function <?php echo $name["plural"]; ?>_fetch(){
     $.ajax({
-      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $plural; ?>/<?php echo $data_endpoint; ?>",
+      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/<?php echo $data["data_endpoint"]; ?>",
       type: "post",
       dataType: "json",
       success: function(data){
         if (data.responce == "success") {
 
           var i = "1";
-          $('#<?php echo $plural; ?>_records').DataTable( {
+          $('#<?php echo $name["plural"]; ?>_records').DataTable( {
             "data": data.posts,
             "responsive": true,
             dom:
@@ -230,9 +230,9 @@ if (isset($relation)) {
             // { "data": "event_children" },
             { "render": function ( data, type, row, meta ) {
               var a = `
-              <a href="#" value="${row.id}" id="<?php echo $plural; ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
-              <a href="#" value="${row.id}" id="<?php echo $plural; ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
-              <a href="/g_relate/record/t/<?php echo $plural; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</a>
+              <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+              <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
+              <a href="/g_relate/record/t/<?php echo $name["plural"]; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</a>
               `;
               return a;
             } }
@@ -247,11 +247,11 @@ if (isset($relation)) {
 
   }
 
-  <?php echo $plural; ?>_fetch();
+  <?php echo $name["plural"]; ?>_fetch();
 
   // Delete Record
 
-  $(document).on("click", "#<?php echo $plural; ?>_del", function(e){
+  $(document).on("click", "#<?php echo $name["plural"]; ?>_del", function(e){
     e.preventDefault();
 
     var del_id = $(this).attr("value");
@@ -276,7 +276,7 @@ if (isset($relation)) {
       if (result.value) {
 
         $.ajax({
-          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $plural; ?>/delete",
+          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/delete",
           type: "post",
           dataType: "json",
           data: {
@@ -284,8 +284,8 @@ if (isset($relation)) {
           },
           success: function(data){
             if (data.responce == "success") {
-              $('#<?php echo $plural; ?>_records').DataTable().destroy();
-              <?php echo $plural; ?>_fetch();
+              $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
+              <?php echo $name["plural"]; ?>_fetch();
               swalWithBootstrapButtons.fire(
               'Deleted!',
               'Your file has been deleted.',
@@ -320,13 +320,13 @@ if (isset($relation)) {
 
   // Edit Record
 
-  $(document).on("click", "#<?php echo $plural; ?>_edit", function(e){
+  $(document).on("click", "#<?php echo $name["plural"]; ?>_edit", function(e){
     e.preventDefault();
 
     var edit_id = $(this).attr("value");
 
     $.ajax({
-      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $plural; ?>/edit",
+      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/edit",
       type: "post",
       dataType: "json",
       data: {
@@ -334,19 +334,19 @@ if (isset($relation)) {
       },
       success: function(data){
         if (data.responce == "success") {
-          $('#<?php echo $plural; ?>_edit_modal').modal('show');
-          $("#<?php echo $plural; ?>_edit_record_id").val(data.post.id);
+          $('#<?php echo $name["plural"]; ?>_edit_modal').modal('show');
+          $("#<?php echo $name["plural"]; ?>_edit_record_id").val(data.post.id);
           <?php
           foreach ($rows as $key => $value) {
             if ($key !== "id") {
               ?>
-              $("#<?php echo $plural; ?>_edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
+              $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
               <?php
             }
           }
           ?>
-          // $("#<?php echo $plural; ?>_edit_name").val(data.post.name);
-          // $("#<?php echo $plural; ?>_edit_event_children").val(data.post.event_children);
+          // $("#<?php echo $name["plural"]; ?>_edit_name").val(data.post.name);
+          // $("#<?php echo $name["plural"]; ?>_edit_event_children").val(data.post.event_children);
         }else{
           toastr["error"](data.message);
         }
@@ -357,29 +357,29 @@ if (isset($relation)) {
 
   // Update Record
 
-  $(document).on("click", "#<?php echo $plural; ?>_update", function(e){
+  $(document).on("click", "#<?php echo $name["plural"]; ?>_update", function(e){
     e.preventDefault();
 
-    var edit_record_id = $("#<?php echo $plural; ?>_edit_record_id").val();
+    var edit_record_id = $("#<?php echo $name["plural"]; ?>_edit_record_id").val();
     <?php
     foreach ($rows as $key => $value) {
       if ($key !== "id") {
         ?>
-        var edit_<?php echo $key; ?> = $("#<?php echo $plural; ?>_edit_<?php echo $key; ?>").val();
+        var edit_<?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val();
         <?php
       }
     }
     ?>
 
-    // var edit_name = $("#<?php echo $plural; ?>_edit_name").val();
-    // var edit_event_children = $("#<?php echo $plural; ?>_edit_event_children").val();
+    // var edit_name = $("#<?php echo $name["plural"]; ?>_edit_name").val();
+    // var edit_event_children = $("#<?php echo $name["plural"]; ?>_edit_event_children").val();
 
     // if (edit_record_id == "" || edit_name == "")
     if (1 !== 1) {
       alert("Both field is required");
     }else{
       $.ajax({
-        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $plural; ?>/update",
+        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/update",
         type: "post",
         dataType: "json",
         data: {
@@ -398,9 +398,9 @@ if (isset($relation)) {
         },
         success: function(data){
           if (data.responce == "success") {
-            $('#<?php echo $plural; ?>_records').DataTable().destroy();
-            <?php echo $plural; ?>_fetch();
-            $('#<?php echo $plural; ?>_edit_modal').modal('hide');
+            $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
+            <?php echo $name["plural"]; ?>_fetch();
+            $('#<?php echo $name["plural"]; ?>_edit_modal').modal('hide');
             toastr["success"](data.message);
           }else{
             toastr["error"](data.message);

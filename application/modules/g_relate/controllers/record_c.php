@@ -21,22 +21,22 @@ class Record_c extends MY_Controller
 
 		$header["title"] = $overview_table_singular." ".$record_id;
 		$body = array();
-		$body["plural"] = $table;
-		$body["singular"] = $overview_table_singular;
-		$body["record"] = $this->g_tbls->fetch_where($body["plural"], "id", $record_id)["posts"][0];
+		$body["name"]["plural"] = $table;
+		$body["name"]["singular"] = $overview_table_singular;
+		$body["data"]["if_one_record"] = $this->g_tbls->fetch_where($body["name"]["plural"], "id", $record_id)["posts"][0];
 
 		$haystack = "id";
 		$needle = $record_id;
-		$body["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-		$body["relation"] = "overview";
+		$body["data"]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+		$body["name"]["type"] = "overview";
 		$dont_scan = "";
 
-		$body["rows"] = $this->children($body["plural"], $body["singular"], $body["record"], $dont_scan);
+		$body["rows"] = $this->children($body["name"]["plural"], $body["name"]["singular"], $body["data"]["if_one_record"], $dont_scan);
 
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 
 
@@ -73,61 +73,59 @@ class Record_c extends MY_Controller
 				if ($this->g_migrate->endsWith($key, "_id")) {
 
 					$suffix = "_id";
-					$singular = $this->suffix_remover($key, $suffix);
+					$name["singular"] = $this->suffix_remover($key, $suffix);
 
 
-					$plural = $this->g_migrate->grammar_plural($singular);
+					$name["plural"] = $this->g_migrate->grammar_plural($name["singular"]);
 
 					if (!empty($parent_record)) {
 						$haystack = "id";
-						$needle = $parent_record[$singular."_id"];
-						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
+						$needle = $parent_record[$name["singular"]."_id"];
+						$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
 
-						$record = $this->g_tbls->fetch_where($plural, $haystack, $needle)["posts"][0];
+						// $data["if_one_record"] = $this->g_tbls->fetch_where($name["plural"], $haystack, $needle)["posts"][0];
 					} else {
-						$data_endpoint = "";
-
-						$record = array();
+						$data = array();
 					}
 
 
-					$relation = "parent";
-					$sub_rows = $this->g_tbls->table_rows($plural);
+					$name["type"] = "parent";
+					$sub_rows = $this->g_tbls->table_rows($name["plural"]);
 
 					$rows[$key] = array(
-						"singular" => $singular,
-						"plural" => $plural,
-						"data_endpoint" => $data_endpoint,
-						"relation" => $relation,
+						"name" => $name,
 						"rows" => $sub_rows,
-						"record" => $record,
+						"data" => $data,
 					);
 
 
 				} elseif ($this->g_migrate->endsWith($key, "_children")) {
 
 					$suffix = "_children";
-					$singular = $this->suffix_remover($key, $suffix);
+					$name["singular"] = $this->suffix_remover($key, $suffix);
 
-					$plural = $this->g_migrate->grammar_plural($singular);
+					$name["plural"] = $this->g_migrate->grammar_plural($name["singular"]);
 
-					if ($this->g_migrate->endsWith($plural, "_links")) {
+					if ($this->g_migrate->endsWith($name["plural"], "_links")) {
 
 
+						if (!empty($parent_record)) {
+							$haystack = $parent_singular."_id";
+							$needle = $parent_record["id"];
+							$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
 
-						$haystack = $parent_singular."_id";
-						$needle = $parent_record["id"];
-						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
+							// $data["if_one_record"] = array();
+						} else {
+							$data = array();
+						}
 
-						$record = array();
-
-						$relation = "shared_children";
-						$sub_rows = $this->g_tbls->table_rows($plural);
+						$name["type"] = "shared_children";
+						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
 
 						// $sub_rows = array();
 						$dont_scan = $parent_singular."_id";
 
-						$sub_rows = $this->children($plural, $singular, $record, $dont_scan);
+						$sub_rows = $this->children($name["plural"], $name["singular"], array(), $dont_scan);
 
 
 
@@ -147,23 +145,23 @@ class Record_c extends MY_Controller
 
 					} else {
 
-						$record = array();
+						if (!empty($parent_record)) {
+							$haystack = $parent_singular."_id";
+							$needle = $record_id;
 
-						$haystack = $parent_singular."_id";
-						$needle = $record_id;
-
-						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
-						$relation = "dedicated_children";
-						$sub_rows = $this->g_tbls->table_rows($plural);
+							$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+							// $data["if_one_record"] = array();
+						} else {
+							$data = array();
+						}
+						$name["type"] = "dedicated_children";
+						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
 					}
 
 					$rows[$key] = array(
-					"singular" => $singular,
-					"plural" => $plural,
-					"data_endpoint" => $data_endpoint,
-					"relation" => $relation,
+					"name" => $name,
 					"rows" => $sub_rows,
-					"record" => $record,
+					"data" => $data,
 					);
 
 				}
