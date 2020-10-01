@@ -108,8 +108,8 @@ class G_tbls extends MY_Controller
 	      // $data['event_children'] = $this->input->post('edit_event_children');
 				$rows = $this->table_rows($table);
 				foreach ($rows as $key => $value) {
-					if ($value !== "id") {
-						$data[$value] = $this->input->post('edit_'.$value);
+					if ($key !== "id") {
+						$data[$key] = $this->input->post('edit_'.$key);
 					}
 				}
 
@@ -136,8 +136,13 @@ class G_tbls extends MY_Controller
       "SHOW COLUMNS FROM $table",
     );
     $row_query = implode(" ", $row_query);
-    $result = $this->db->query($row_query)->result_array();
-    $result = array_column($result, 'Field');
+    $rows = $this->db->query($row_query)->result_array();
+    $rows = array_column($rows, 'Field');
+
+		$result = array();
+		foreach ($rows as $key => $value) {
+			$result[$value] = array();
+		}
 
     return $result;
   }

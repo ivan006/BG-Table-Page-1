@@ -49,11 +49,11 @@
                   <form action="" method="post" id="form">
                     <?php
                     foreach ($rows as $key => $value) {
-                      if ($value !== "id") {
+                      if ($key !== "id") {
                         ?>
                         <div class="form-group">
-                          <label for=""><?php echo $value; ?></label>
-                          <input type="<?php echo $value; ?>" id="<?php echo $value; ?>" class="form-control">
+                          <label for=""><?php echo $key; ?></label>
+                          <input type="<?php echo $key; ?>" id="<?php echo $key; ?>" class="form-control">
                         </div>
                         <?php
                       }
@@ -87,9 +87,9 @@
                   <th>ID</th>
                   <?php
                   foreach ($rows as $key => $value) {
-                    if ($value !== "id") {
+                    if ($key !== "id") {
                       ?>
-                      <th><?php echo $value; ?></th>
+                      <th><?php echo $key; ?></th>
                       <?php
                     }
                   }
@@ -121,11 +121,11 @@
               <input type="hidden" id="edit_record_id" name="edit_record_id" value="">
                 <?php
                 foreach ($rows as $key => $value) {
-                  if ($value !== "id") {
+                  if ($key !== "id") {
                     ?>
                     <div class="form-group">
-                      <label for=""><?php echo $value; ?></label>
-                      <input type="<?php echo $value; ?>" id="edit_<?php echo $value; ?>" class="form-control">
+                      <label for=""><?php echo $key; ?></label>
+                      <input type="<?php echo $key; ?>" id="edit_<?php echo $key; ?>" class="form-control">
                     </div>
                     <?php
                   }
@@ -182,9 +182,9 @@
 
         <?php
         foreach ($rows as $key => $value) {
-          if ($value !== "id") {
+          if ($key !== "id") {
             ?>
-            var <?php echo $value; ?> = $("#<?php echo $value; ?>").val();
+            var <?php echo $key; ?> = $("#<?php echo $key; ?>").val();
             <?php
           }
         }
@@ -203,9 +203,9 @@
             data: {
               <?php
               foreach ($rows as $key => $value) {
-                if ($value !== "id") {
+                if ($key !== "id") {
                   ?>
-                  <?php echo $value; ?>: <?php echo $value; ?>,
+                  <?php echo $key; ?>: <?php echo $key; ?>,
                   <?php
                 }
               }
@@ -259,9 +259,9 @@
                           } },
                           <?php
                           foreach ($rows as $key => $value) {
-                            if ($value !== "id") {
+                            if ($key !== "id") {
                               ?>
-                              { "data": "<?php echo $value; ?>" },
+                              { "data": "<?php echo $key; ?>" },
                               <?php
                             }
                           }
@@ -378,9 +378,9 @@
                 $("#edit_record_id").val(data.post.id);
                 <?php
                 foreach ($rows as $key => $value) {
-                  if ($value !== "id") {
+                  if ($key !== "id") {
                     ?>
-                    $("#edit_<?php echo $value; ?>").val(data.post.<?php echo $value; ?>);
+                    $("#edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
                     <?php
                   }
                 }
@@ -403,9 +403,9 @@
         var edit_record_id = $("#edit_record_id").val();
         <?php
         foreach ($rows as $key => $value) {
-          if ($value !== "id") {
+          if ($key !== "id") {
             ?>
-            var edit_<?php echo $value; ?> = $("#edit_<?php echo $value; ?>").val();
+            var edit_<?php echo $key; ?> = $("#edit_<?php echo $key; ?>").val();
             <?php
           }
         }
@@ -426,9 +426,9 @@
               edit_record_id: edit_record_id,
               <?php
               foreach ($rows as $key => $value) {
-                if ($value !== "id") {
+                if ($key !== "id") {
                   ?>
-                  edit_<?php echo $value; ?>: edit_<?php echo $value; ?>,
+                  edit_<?php echo $key; ?>: edit_<?php echo $key; ?>,
                   <?php
                 }
               }

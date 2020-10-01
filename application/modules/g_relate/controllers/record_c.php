@@ -23,38 +23,38 @@ class Record_c extends MY_Controller
 		$header["title"] = $overview_table_singular." ".$record_id;
 
 		$body = array();
-		$body["overview"]["name"]["plural"] = $table;
-		$body["overview"]["name"]["singular"] = $overview_table_singular;
+		$body["overview"]["plural"] = $table;
+		$body["overview"]["singular"] = $overview_table_singular;
 
 		$haystack = "id";
 		$needle = $record_id;
-		$body["overview"]["data"] = array(
-			"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
-			"relation_name" => "overview",
-			"rows" => $this->g_tbls->table_rows($table),
-		);
+		$body["overview"]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+		$body["overview"]["relation"] = "overview";
+		$body["overview"]["rows"] = $this->g_tbls->table_rows($table);
 
 
 		$suffix = "_id";
 		$body["parent"] = array();
-		foreach ($body["overview"]["data"]["rows"] as $key => $value) {
-			if ($this->g_migrate->endsWith($value, $suffix)) {
-				$body["parent"][$key]["name"] = $this->foreign_table_guesser($value, $suffix);
+		foreach ($body["overview"]["rows"] as $key => $value) {
+			if ($this->g_migrate->endsWith($key, $suffix)) {
+				$body["parent"][$key]["singular"] = $this->suffix_remover($key, $suffix);
+				$body["parent"][$key]["plural"] = $this->g_migrate->grammar_plural($body["parent"][$key]["singular"]);
 			}
 		}
 
 		$children_groups = array();
 		$suffix = "_children";
-		foreach ($body["overview"]["data"]["rows"] as $key => $value) {
-			if ($this->g_migrate->endsWith($value, $suffix)) {
-				$children_groups[$key]["name"] = $this->foreign_table_guesser($value, $suffix);
+		foreach ($body["overview"]["rows"] as $key => $value) {
+			if ($this->g_migrate->endsWith($key, $suffix)) {
+				$children_groups[$key]["singular"] = $this->suffix_remover($key, $suffix);
+				$children_groups[$key]["plural"] = $this->g_migrate->grammar_plural($children_groups[$key]["singular"]);
 			}
 		}
 
 		$body["dedicated_children"] = array();
 		$body["shared_children"] = array();
 		foreach ($children_groups as $key => $value) {
-			if ($this->g_migrate->endsWith($value["name"]["plural"], "_links")) {
+			if ($this->g_migrate->endsWith($value["plural"], "_links")) {
 				$body["shared_children"][$key] = $value;
 			} else {
 				$body["dedicated_children"][$key] = $value;
@@ -66,57 +66,59 @@ class Record_c extends MY_Controller
 		foreach ($body["shared_children"] as $key => $value) {
 
 
-			$haystack = $body["overview"]["name"]["singular"]."_id";
+			$haystack = $body["overview"]["singular"]."_id";
 			$needle = $record_id;
-			$relation_name_suffix = "_shared_children";
 
-			$body["shared_children"][$key]["data"] = array(
-				"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
-				"relation_name" => $value["name"]["singular"].$relation_name_suffix,
-				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
-			);
+			$body["shared_children"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+			$body["shared_children"][$key]["relation"] = "shared_children";
+			$body["shared_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
 
-			$body["shared_children"][$key]["data"]["extra"] = array(
+			$join_singular = $body["shared_children"][$key]["rows"];
+			unset($join_singular["id"]);
+			unset($join_singular[$body["overview"]["singular"]."_id"]);
+
+
+
+			// header('Content-Type: application/json');
+			// echo json_encode($join_singular, JSON_PRETTY_PRINT);
+			// exit;
+
+			$body["shared_children"][$key]["join"] = array(
 				"linking" => "",
 				"lookup" => "",
-				"join" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
+				"" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
 			);
 
 
 
-			$body["shared_children"][$key]["data"]["rows"] = $this->g_tbls->table_rows($value["name"]["plural"]);
+			$body["shared_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
 
 		}
 
 		foreach ($body["dedicated_children"] as $key => $value) {
 
-			$haystack = $body["overview"]["name"]["singular"]."_id";
+			$haystack = $body["overview"]["singular"]."_id";
 			$needle = $record_id;
-			$relation_name_suffix = "_dedicated_children";
 
-			$body["dedicated_children"][$key]["data"] = array(
-				"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
-				"relation_name" => $value["name"]["singular"].$relation_name_suffix,
-				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
-			);
+			$body["dedicated_children"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+			$body["dedicated_children"][$key]["relation"] = "dedicated_children";
+			$body["dedicated_children"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
 		}
 
 		foreach ($body["parent"] as $key => $value) {
 
 			$haystack = "id";
-			$needle = $overview_record[$value["name"]["singular"]."_id"];
-			$relation_name_suffix = "_parent";
+			$needle = $overview_record[$value["singular"]."_id"];
 
-			$body["parent"][$key]["data"] = array(
-				"data_endpoint" => "fetch_where/h/$haystack/n/$needle",
-				"relation_name" => $value["name"]["singular"].$relation_name_suffix,
-				"rows" => $this->g_tbls->table_rows($value["name"]["plural"]),
-			);
+
+			$body["parent"][$key]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+			$body["parent"][$key]["relation"] = "parent";
+			$body["parent"][$key]["rows"] = $this->g_tbls->table_rows($value["plural"]);
 		}
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 
 		$this->load->view('table_header_v', $header);
@@ -135,14 +137,12 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function foreign_table_guesser($value, $suffix)
+
+	public function suffix_remover($value, $suffix)
 	{
 
 		$suffix_strlen = strlen($suffix);
-		$value_singular = substr($value, 0, -$suffix_strlen);
-		$relation_table = $this->g_migrate->grammar_plural($value_singular);
-		$result["plural"] = $relation_table;
-		$result["singular"] = $value_singular;
+		$result = substr($value, 0, -$suffix_strlen);
 		return $result;
 
 	}
