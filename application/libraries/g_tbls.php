@@ -8,6 +8,7 @@ class G_tbls extends MY_Controller
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
+		$this->load->library('g_migrate');
 	}
 
   public function insert($table)
@@ -167,12 +168,15 @@ class G_tbls extends MY_Controller
     return $data;
   }
 
-  public function fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle)
+  public function fetch_join_where($table_1, $table_2)
   {
 
 		// $posts = $this->db->select('*')->where($haystack, $needle)->from($table_1)->join($table_2, "$table_1.$table_2_key = $table_2.id")->get()->result_array();
+		$key = $this->g_migrate->grammar_singular($table_2);
+		$key = $key."_id";
 
-		$posts = $this->db->select('*')->from($table_2)->join($table_1, "$table_1.$table_2_key = $table_2.id")->get()->result_array();
+
+		$posts = $this->db->select('*')->from($table_2)->join($table_1, "$table_1.$key = $table_2.id")->get()->result_array();
 
 		$data = array('responce' => 'success', 'posts' => $posts);
     return $data;

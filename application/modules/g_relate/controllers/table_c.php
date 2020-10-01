@@ -46,9 +46,9 @@ class Table_c extends MY_Controller
 		echo json_encode($result, JSON_PRETTY_PRINT);
 	}
 
-	public function fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle)
+	public function fetch_join_where($table_1, $table_2)
 	{
-		$result = $this->g_tbls->fetch_join_where($table_1, $table_2, $table_2_key, $haystack, $needle);
+		$result = $this->g_tbls->fetch_join_where($table_1, $table_2);
 		header('Content-Type: application/json');
 		echo json_encode($result, JSON_PRETTY_PRINT);
 	}

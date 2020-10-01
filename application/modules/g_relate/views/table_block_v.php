@@ -1,3 +1,13 @@
+
+
+<?php
+if (isset($join)) {
+  $rows = $join["rows"];
+  $data_endpoint = $join["data_endpoint"];
+  $name["singular"] = $join["name"]["singular"];
+}
+?>
+
 <?php
 if (isset($name["type"])) {
   ?>
@@ -196,7 +206,7 @@ if (isset($name["type"])) {
 
   function <?php echo $name["plural"]; ?>_fetch(){
     $.ajax({
-      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/<?php echo $data["data_endpoint"]; ?>",
+      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/<?php echo $data_endpoint; ?>",
       type: "post",
       dataType: "json",
       success: function(data){

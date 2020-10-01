@@ -23,20 +23,20 @@ class Record_c extends MY_Controller
 		$body = array();
 		$body["name"]["plural"] = $table;
 		$body["name"]["singular"] = $overview_table_singular;
-		$body["data"]["if_one_record"] = $this->g_tbls->fetch_where($body["name"]["plural"], "id", $record_id)["posts"][0];
+		$record = $this->g_tbls->fetch_where($body["name"]["plural"], "id", $record_id)["posts"][0];
 
 		$haystack = "id";
 		$needle = $record_id;
-		$body["data"]["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+		$body["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
 		$body["name"]["type"] = "overview";
 		$dont_scan = "";
 
-		$body["rows"] = $this->children($body["name"]["plural"], $body["name"]["singular"], $body["data"]["if_one_record"], $dont_scan);
+		$body["rows"] = $this->children($body["name"], $record, $dont_scan);
 
 
-		header('Content-Type: application/json');
-		echo json_encode($body, JSON_PRETTY_PRINT);
-		exit;
+		// header('Content-Type: application/json');
+		// echo json_encode($body, JSON_PRETTY_PRINT);
+		// exit;
 
 
 
@@ -65,9 +65,9 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function children($parent_plural, $parent_singular, $parent_record, $dont_scan)
+	public function children($parent_name, $parent_record, $dont_scan)
 	{
-		$rows = $this->g_tbls->table_rows($parent_plural);
+		$rows = $this->g_tbls->table_rows($parent_name["plural"]);
 		foreach ($rows as $key => $value) {
 			if ($key !== $dont_scan) {
 				if ($this->g_migrate->endsWith($key, "_id")) {
@@ -81,11 +81,10 @@ class Record_c extends MY_Controller
 					if (!empty($parent_record)) {
 						$haystack = "id";
 						$needle = $parent_record[$name["singular"]."_id"];
-						$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
 
-						// $data["if_one_record"] = $this->g_tbls->fetch_where($name["plural"], $haystack, $needle)["posts"][0];
 					} else {
-						$data = array();
+						$data_endpoint = "";
 					}
 
 
@@ -95,7 +94,7 @@ class Record_c extends MY_Controller
 					$rows[$key] = array(
 						"name" => $name,
 						"rows" => $sub_rows,
-						"data" => $data,
+						"data_endpoint" => $data_endpoint,
 					);
 
 
@@ -110,60 +109,83 @@ class Record_c extends MY_Controller
 
 
 						if (!empty($parent_record)) {
-							$haystack = $parent_singular."_id";
+							$haystack = $parent_name["singular"]."_id";
 							$needle = $parent_record["id"];
-							$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
+							$data_endpoint = "fetch_where/h/$haystack/n/$needle";
 
-							// $data["if_one_record"] = array();
 						} else {
-							$data = array();
+							$data_endpoint = "";
 						}
 
 						$name["type"] = "shared_children";
 						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
 
-						// $sub_rows = array();
-						$dont_scan = $parent_singular."_id";
+						$record = array();
+						$dont_scan = $parent_name["singular"]."_id";
 
-						$sub_rows = $this->children($name["plural"], $name["singular"], array(), $dont_scan);
+						$sub_rows = $this->children($name, $record, $dont_scan);
 
 
 
-						$join_singular = $rows;
-						unset($join_singular["id"]);
-						unset($join_singular[$parent_singular."_id"]);
-						// header('Content-Type: application/json');
-						// echo json_encode($join_singular, JSON_PRETTY_PRINT);
-						// exit;
 
-						$join = array(
-						"linking" => "",
-						"lookup" => "",
-						"" => "fetch_join_where/t/whens/k/when_id/h/$haystack/n/$needle",
+						$lookup_table = array();
+						$rel_rows = array();
+						foreach ($sub_rows as $sub_row_key => $sub_row_value) {
+							if (!empty($sub_row_value)) {
+								$rel_rows[] = $sub_row_value;
+							}
+						}
+						if (!empty($rel_rows)) {
+							$lookup_table = $rel_rows[0];
+						}
+
+						$join["lookup"] = $lookup_table;
+						$join_merge = array_merge(array_keys($lookup_table["rows"]), array_keys($sub_rows));
+						$join_merge = array_unique($join_merge);
+						$join_merge = array_flip($join_merge);
+						foreach ($join_merge as $join_merge_key => $join_merge_value) {
+							$join_merge[$join_merge_key] = array();
+						}
+
+						// $join["join"] = $join_merge;
+						$join["data_endpoint"] = "fetch_join_where/t/".$lookup_table["name"]["plural"];
+						$join["rows"] = $join_merge;
+						$join["name"] = $lookup_table["name"];
+
+						$rows[$key] = array(
+							"name" => $name,
+							"rows" => $sub_rows,
+							"data_endpoint" => $data_endpoint,
+							"join" => $join,
 						);
+
+
+
 
 
 					} else {
 
 						if (!empty($parent_record)) {
-							$haystack = $parent_singular."_id";
+							$haystack = $parent_name["singular"]."_id";
 							$needle = $record_id;
 
-							$data["data_endpoint"] = "fetch_where/h/$haystack/n/$needle";
-							// $data["if_one_record"] = array();
+							$data = "fetch_where/h/$haystack/n/$needle";
+
 						} else {
-							$data = array();
+							$data_endpoint = "";
 						}
 						$name["type"] = "dedicated_children";
 						$sub_rows = $this->g_tbls->table_rows($name["plural"]);
+
+
+
+						$rows[$key] = array(
+						"name" => $name,
+						"rows" => $sub_rows,
+						"data_endpoint" => $data_endpoint,
+						);
+
 					}
-
-					$rows[$key] = array(
-					"name" => $name,
-					"rows" => $sub_rows,
-					"data" => $data,
-					);
-
 				}
 			} else {
 				$rows[$key] = array();
