@@ -148,23 +148,6 @@ class G_tbls extends MY_Controller
     return $result;
   }
 
-  public function db_tables()
-  {
-
-    $row_query = array(
-      "SHOW TABLES",
-    );
-    $row_query = implode(" ", $row_query);
-    $result = $this->db->query($row_query)->result_array();
-    $result = array_column($result, 'Tables_in_greenbluegpyuty_db5');
-		foreach ($result as $key => $value) {
-			$post[]["name"] = $value;
-		}
-
-		$data = array('responce' => 'success', 'posts' => $post);
-		return $data;
-  }
-
   public function fetch_where($table, $haystack, $needle)
   {
 		$posts = $this->db->where($haystack, $needle)->get($table)->result_array();
@@ -187,6 +170,30 @@ class G_tbls extends MY_Controller
 		$data = array('responce' => 'success', 'posts' => $posts);
     return $data;
 
+  }
+
+  public function database_api()
+  {
+
+    $row_query = array(
+      "SHOW TABLES",
+    );
+    $row_query = implode(" ", $row_query);
+    $rows = $this->db->query($row_query)->result_array();
+    $rows = array_column($rows, 'Tables_in_greenbluegpyuty_db5');
+		foreach ($rows as $key => $value) {
+			$rows_formatted[]["name"] = $value;
+		}
+
+		// $result = array();
+		foreach ($rows_formatted as $key => $value) {
+			if (!$this->g_migrate->endsWith($value["name"], "_links")) {
+				$rows_no_links[]["name"] = $value["name"];
+			}
+		}
+
+		$data = array('responce' => 'success', 'posts' => $rows_no_links);
+		return $data;
   }
 
 }

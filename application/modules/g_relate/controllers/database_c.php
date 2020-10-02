@@ -15,7 +15,7 @@ class Database_c extends MY_Controller
 
 	public function database()
 	{
-		$data['tables'] = $this->g_tbls->db_tables();
+		$data['tables'] = $this->g_tbls->database_api();
 
 
 
@@ -32,7 +32,7 @@ class Database_c extends MY_Controller
 
 	public function database_api()
 	{
-		$data = $this->g_tbls->db_tables();
+		$data = $this->g_tbls->database_api();
 		header('Content-Type: application/json');
 		echo json_encode($data, JSON_PRETTY_PRINT);
 
