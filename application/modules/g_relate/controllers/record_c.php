@@ -125,7 +125,7 @@ class Record_c extends MY_Controller
 							$data_endpoint = "";
 						}
 
-						$name["type"] = "reusable_item";
+						$name["type"] = "reusable_items";
 						// $sub_rows = $this->g_tbls->table_rows($name["plural"]);
 
 						$record = array();
@@ -190,7 +190,7 @@ class Record_c extends MY_Controller
 						} else {
 							$data_endpoint = "";
 						}
-						$name["type"] = "dedicated_item";
+						$name["type"] = "dedicated_items";
 
 						$sub_rows["all"] = $this->g_tbls->table_rows($name["plural"]);
 

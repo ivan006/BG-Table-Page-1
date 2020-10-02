@@ -1,25 +1,40 @@
 
 
 <?php
-if (isset($join)) {
-  $editable_rows = $rows["visible"];
-  $readable_rows = $join["rows"]["visible"];
-  $data_endpoint = $join["data_endpoint"];
-  $name["singular"] = $join["name"]["singular"];
-} else {
+if (!isset($join)) {
   $editable_rows = $rows["visible"];
   $readable_rows = $rows["visible"];
 
+  $view_link_table = $name["plural"];
+  $view_link_id_key = "id";
+} else {
+
+  $editable_rows = $rows["visible"];
+  $readable_rows = $join["rows"]["visible"];
+  $data_endpoint = $join["data_endpoint"];
+
+  $lookup_table_names = $join["lookup"]["name"];
+  $view_link_table = $join["name"]["plural"];
+  $view_link_id_key = $join["name"]["singular"]."_id";
 }
 ?>
 
 <?php
 if (isset($name["type"])) {
+  if ($name["type"] == "overview") {
+    $subtitle = $name["type"];
+  } elseif ($name["type"] == "owner") {
+    $subtitle = $name["singular"]." (".$name["type"].")";
+  } elseif ($name["type"] == "reusable_items") {
+    $subtitle = $join["name"]["plural"]." (".$name["type"].")";
+  } else {
+    $subtitle = $name["plural"]." (".$name["type"].")";
+  }
   ?>
     <div class="row">
       <div class="col-md-12 mt-5">
         <h2 class="text-center">
-          <?php echo $name["singular"]."_(".$name["type"].")"; ?>
+          <?php echo $subtitle ?>
         </h2>
         <hr style="background-color: black; color: black; height: 1px;">
       </div>
@@ -247,7 +262,7 @@ if (isset($name["type"])) {
               var a = `
               <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
               <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
-              <a href="/g_relate/record/t/<?php echo $name["plural"]; ?>/r/${row.id}" class="btn btn-sm btn-outline-primary">View</a>
+              <a href="/g_relate/record/t/<?php echo $view_link_table; ?>/r/${row.<?php echo $view_link_id_key; ?>}" class="btn btn-sm btn-outline-primary">View</a>
               `;
               return a;
             } }
