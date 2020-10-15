@@ -1,0 +1,40 @@
+{
+  "events": [
+    "event_bedding_resources_links",
+    "event_personal_resources_links",
+    "event_food_resources_links",
+    "event_transport_resources_links",
+    "event_place_links",
+    "event_person_links"
+  ],
+  "bedding_resources": [
+    "event_bedding_resources_links"
+  ],
+  "transport_resources": [
+    "event_transport_resources_links"
+  ],
+  "personal_resources": [
+    "event_personal_resources_links"
+  ],
+  "food_resources": [
+    "event_food_resources_links"
+  ],
+  "places": [
+    "event_place_links"
+  ],
+  "persons": [
+    "event_person_links"
+  ],
+  "event_bedding_resources_links": [
+  ],
+  "event_personal_resources_links": [
+  ],
+  "event_food_resources_links": [
+  ],
+  "event_transport_resources_links": [
+  ],
+  "event_place_links": [
+  ],
+  "event_person_links": [
+  ]
+}

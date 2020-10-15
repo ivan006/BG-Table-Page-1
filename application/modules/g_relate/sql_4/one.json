@@ -1,0 +1,22 @@
+{
+  "events": [
+    "event_resource_links",
+    "event_place_links",
+    "event_person_links"
+  ],
+  "resources": [
+    "event_resource_links"
+  ],
+  "places": [
+    "event_place_links"
+  ],
+  "persons": [
+    "event_person_links"
+  ],
+  "event_resource_links": [
+  ],
+  "event_place_links": [
+  ],
+  "event_person_links": [
+  ]
+}

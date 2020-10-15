@@ -1,0 +1,84 @@
+{
+    "events": {
+        "event_resource_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "event_place_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "event_person_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "resources": {
+        "event_resource_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "places": {
+        "event_place_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "persons": {
+        "event_person_link_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "name": {
+        	"type": "character varying",
+        	"length": "(100)",
+        	"null": "NOT NULL"
+        }
+    },
+    "event_resource_links": {
+        "event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "resource_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    },
+    "event_place_links": {
+        "event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "place_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    },
+    "event_person_links": {
+        "event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "person_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        }
+    }
+}
