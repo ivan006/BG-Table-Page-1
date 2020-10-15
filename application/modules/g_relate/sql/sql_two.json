@@ -1,164 +1,49 @@
 {
     "events": {
-        "event_bedding_resources_link_children": {
+        "organization_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
-        "event_personal_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "event_food_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "event_transport_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "event_place_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "event_person_link_children": {
+        "event_resource_link_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
         "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        },
-        "dates": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
+            "type": "character varying",
+            "length": "(100)",
+            "null": "NOT NULL"
         }
     },
-    "bedding_resources": {
-        "event_bedding_resources_link_children": {
+    "event_resource_links": {
+        "resource_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "transport_resources": {
-        "event_transport_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "personal_resources": {
-        "event_personal_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "food_resources": {
-        "event_food_resources_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "places": {
-        "event_place_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "persons": {
-        "event_person_link_children": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "name": {
-        	"type": "character varying",
-        	"length": "(100)",
-        	"null": "NOT NULL"
-        }
-    },
-    "event_bedding_resources_links": {
         "event_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
-        },
-        "bedding_resource_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
         }
     },
-    "event_personal_resources_links": {
-        "event_id": {
+    "resources": {
+        "event_resource_link_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
-        "personal_resource_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
+        "name": {
+            "type": "character varying",
+            "length": "(100)",
+            "null": "NOT NULL"
         }
     },
-    "event_food_resources_links": {
-        "event_id": {
+    "organizations": {
+        "event_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
-        "food_resource_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        }
-    },
-    "event_transport_resources_links": {
-        "event_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "transport_resource_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        }
-    },
-    "event_place_links": {
-        "event_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "place_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        }
-    },
-    "event_person_links": {
-        "event_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
-        },
-        "person_id": {
-            "type": "BIGINT",
-            "collation": "UNSIGNED"
+        "name": {
+            "type": "character varying",
+            "length": "(100)",
+            "null": "NOT NULL"
         }
     }
 }

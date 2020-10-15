@@ -1,11 +1,11 @@
 {
-  "events": [
-    "resources"
-  ],
-  "resources": [
-    "events"
-  ],
-  "organizations": [
-    "events"
-  ]
+  "events": {
+    "resources": ""
+  },
+  "resources": {
+    "events": ""
+  },
+  "organizations": {
+    "events": ""
+  }
 }

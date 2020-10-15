@@ -91,9 +91,9 @@ class G_migrate extends MY_Controller
 		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
-		// echo "<pre>";
-		// echo $relationships_json;
-		// exit;
+		echo "<pre>";
+		echo $relationships_json;
+		exit;
 
 		$tables = array();
 		$nth_table = 0;
@@ -150,6 +150,13 @@ class G_migrate extends MY_Controller
 				);
 			}
 
+
+			$tables[$table_key]["name"] = array(
+				"type" => "character varying",
+				"length" => "(100)",
+				"null" => "NOT NULL",
+			);
+
 			$nth_table = $nth_table+1;
 		}
 		$tables_json = json_encode($tables, JSON_PRETTY_PRINT);
@@ -172,7 +179,6 @@ class G_migrate extends MY_Controller
 			foreach ($table_value["has_many"] as $foreign_key) {
 				if (isset($result[$foreign_key])) {
 					$has_many_key = array_search($table_key, $result[$foreign_key]["has_many"]);
-
 					if ($has_many_key !== false) {
 						// echo $table_key." in ".$foreign_key." has_many<br>";
 						array_push($result[$foreign_key]["has_many_belong_many"], $table_key);
