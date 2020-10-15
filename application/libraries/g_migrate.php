@@ -91,9 +91,9 @@ class G_migrate extends MY_Controller
 		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
-		echo "<pre>";
-		echo $relationships_json;
-		exit;
+		// echo "<pre>";
+		// echo $relationships_json;
+		// exit;
 
 		$tables = array();
 		$nth_table = 0;
@@ -108,6 +108,9 @@ class G_migrate extends MY_Controller
 			// 	"null" => "NOT NULL",
 			// 	"a_i" => "AUTO_INCREMENT",
 			// );
+
+			$tables[$table_key] = array();
+
 			foreach ($table_value["has_many"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
 				$tables[$table_key][$rel_value."_children"] = array(
@@ -118,6 +121,30 @@ class G_migrate extends MY_Controller
 			foreach ($table_value["has_one"] as $rel_key => $rel_value) {
 				$rel_value = $this->grammar_singular($rel_value);
 				$tables[$table_key][$rel_value."_id"] = array(
+				"type" => "BIGINT",
+				"collation" => "UNSIGNED",
+				);
+			}
+			foreach ($table_value["has_many_belong_many"] as $rel_key => $rel_value) {
+				$table_key_singular = $this->grammar_singular($table_key);
+
+				$rel_value = $this->grammar_singular($rel_value);
+				$link_table = array(
+					$table_key_singular,
+					$rel_value
+				);
+				sort($link_table);
+				$link_table = implode("_",$link_table);
+				$link_table = $link_table."_links";
+
+				$tables[$link_table][$rel_value."_id"] = array(
+				"type" => "BIGINT",
+				"collation" => "UNSIGNED",
+				);
+
+
+				$link_table = $this->grammar_singular($link_table);
+				$tables[$table_key][$link_table."_children"] = array(
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
 				);
