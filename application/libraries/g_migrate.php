@@ -91,6 +91,10 @@ class G_migrate extends MY_Controller
 		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
+		echo "<pre>";
+		echo $relationships_json;
+		exit;
+
 		$tables = array();
 		$nth_table = 0;
 		foreach ($relationships as $table_key => $table_value) {
@@ -130,20 +134,30 @@ class G_migrate extends MY_Controller
 	function relationships($one)
 	{
 
-		$relationships = array();
+		$result = array();
 		foreach ($one as $table_key => $table_value) {
-			$relationships[$table_key]["has_many"] = $table_value;
-			$relationships[$table_key]["has_one"] = array();
+			$result[$table_key]["has_many"] = $table_value;
+			$result[$table_key]["has_one"] = array();
+			$result[$table_key]["has_many_belong_many"] = array();
 		}
-		foreach ($relationships as $table_key => $table_value) {
-			foreach ($table_value["has_many"] as $relative_key => $relative_value) {
-				if (isset($relationships[$relative_value])) {
-					array_push($relationships[$relative_value]["has_one"],$table_key);
+
+		foreach ($result as $table_key => $table_value) {
+			foreach ($table_value["has_many"] as $foreign_key) {
+				if (isset($result[$foreign_key])) {
+					$has_many_key = array_search($table_key, $result[$foreign_key]["has_many"]);
+
+					if ($has_many_key !== false) {
+						// echo $table_key." in ".$foreign_key." has_many<br>";
+						array_push($result[$foreign_key]["has_many_belong_many"], $table_key);
+						unset($result[$foreign_key]["has_many"][$has_many_key]);
+					} else {
+						array_push($result[$foreign_key]["has_one"],$table_key);
+					}
 				}
 			}
 		}
 
-		return $relationships;
+		return $result;
 	}
 
 	function model_two()
