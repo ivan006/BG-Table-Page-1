@@ -91,9 +91,9 @@ class G_migrate extends MY_Controller
 		$relationships = $this->relationships($one);
 		$relationships_json = json_encode($relationships, JSON_PRETTY_PRINT);
 
-		echo "<pre>";
-		echo $relationships_json;
-		exit;
+		// echo "<pre>";
+		// echo $relationships_json;
+		// exit;
 
 		$tables = array();
 		$nth_table = 0;
@@ -112,32 +112,47 @@ class G_migrate extends MY_Controller
 			$tables[$table_key] = array();
 
 			foreach ($table_value["has_many"] as $rel_key => $rel_value) {
-				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][$rel_value."_children"] = array(
+				if ($rel_value !== "") {
+					$speciality = $rel_value."_specialty_";
+				} else {
+					$speciality = "";
+				}
+				$rel_key = $this->grammar_singular($rel_key);
+				$tables[$table_key][$speciality.$rel_key."_children"] = array(
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
 				);
 			}
 			foreach ($table_value["has_one"] as $rel_key => $rel_value) {
-				$rel_value = $this->grammar_singular($rel_value);
-				$tables[$table_key][$rel_value."_id"] = array(
+				if ($rel_value !== "") {
+					$speciality = $rel_value."_specialty_";
+				} else {
+					$speciality = "";
+				}
+				$rel_key = $this->grammar_singular($rel_key);
+				$tables[$table_key][$speciality.$rel_key."_id"] = array(
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
 				);
 			}
 			foreach ($table_value["has_many_belong_many"] as $rel_key => $rel_value) {
+				if ($rel_value !== "") {
+					$speciality = $rel_value."_specialty_";
+				} else {
+					$speciality = "";
+				}
 				$table_key_singular = $this->grammar_singular($table_key);
 
-				$rel_value = $this->grammar_singular($rel_value);
+				$rel_key = $this->grammar_singular($rel_key);
 				$link_table = array(
 					$table_key_singular,
-					$rel_value
+					$rel_key
 				);
 				sort($link_table);
 				$link_table = implode("_",$link_table);
-				$link_table = $link_table."_links";
+				$link_table = $speciality.$link_table."_links";
 
-				$tables[$link_table][$rel_value."_id"] = array(
+				$tables[$link_table][$speciality.$rel_key."_id"] = array(
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
 				);
@@ -176,15 +191,17 @@ class G_migrate extends MY_Controller
 		}
 
 		foreach ($result as $table_key => $table_value) {
-			foreach ($table_value["has_many"] as $foreign_key) {
-				if (isset($result[$foreign_key])) {
-					$has_many_key = array_search($table_key, $result[$foreign_key]["has_many"]);
-					if ($has_many_key !== false) {
-						// echo $table_key." in ".$foreign_key." has_many<br>";
-						array_push($result[$foreign_key]["has_many_belong_many"], $table_key);
-						unset($result[$foreign_key]["has_many"][$has_many_key]);
+			foreach ($table_value["has_many"] as $rel_foreigner => $rel_speciality) {
+				if (isset($result[$rel_foreigner])) {
+
+					if (array_key_exists($table_key, $result[$rel_foreigner]["has_many"])) {
+						// echo $table_key." in ".$rel_foreigner." has_many<br>";
+						// array_push($result[$rel_foreigner]["has_many_belong_many"], $table_key);
+						$result[$rel_foreigner]["has_many_belong_many"][$table_key] = $rel_speciality;
+						unset($result[$rel_foreigner]["has_many"][$table_key]);
 					} else {
-						array_push($result[$foreign_key]["has_one"],$table_key);
+						// array_push($result[$rel_foreigner]["has_one"],$table_key);
+						$result[$rel_foreigner]["has_one"][$table_key] = $rel_speciality;
 					}
 				}
 			}
