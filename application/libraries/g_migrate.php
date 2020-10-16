@@ -141,6 +141,7 @@ class G_migrate extends MY_Controller
 				"collation" => "UNSIGNED",
 				);
 			}
+
 			foreach ($table_value["has_many_belong_many"] as $rel_name) {
 				// if ($rel_value !== "") {
 				// 	$speciality = $rel_value."_specialty_";
@@ -201,7 +202,8 @@ class G_migrate extends MY_Controller
 		}
 
 		foreach ($result as $table_key => $table_value) {
-			foreach ($table_value["has_many"] as $rel_name) {
+			$has_manies_to_unset = array();
+			foreach ($table_value["has_many"] as $rel_key => $rel_name) {
 
 				$rel = $this->relationship_helper($rel_name, $table_key);
 
@@ -209,16 +211,41 @@ class G_migrate extends MY_Controller
 
 
 					// echo $foreign_rel_name."-- <br>";
+					// echo $rel["foreign_plural"]."-- ".$rel["rel_name_singular"]."<br>";
+					// echo $table_key." - ".$rel_name." -- ".$rel["foreign_rel_name"]."<br>";
 
-					$has_many_key = array_search($rel["foreign_rel_name"], $result[$rel["foreign_plural"]]["has_many"]);
+					$has_many_key_specialised = array_search($rel["foreign_rel_name"], $result[$rel["foreign_plural"]]["has_many"]);
+
+					$has_many_key_generic = array_search($table_key, $result[$rel["foreign_plural"]]["has_many"]);
+
+					if ($has_many_key_specialised !== false) {
+						$has_many_key = $has_many_key_specialised;
+					} else {
+						$has_many_key = $has_many_key_generic;
+					}
+
+					// echo "<pre>";
+					// echo $table_key."	-	".$rel_name."	-	".$rel["foreign_rel_name"]."	-	".$table_key."	-	#".$has_many_key."#"."<br>";
+					// echo "</table>";
+
 					if ($has_many_key !== false) {
 						// echo $table_key." in ".$rel_name." has_many<br>";
 						array_push($result[$rel["foreign_plural"]]["has_many_belong_many"], $table_key);
-						unset($result[$rel["foreign_plural"]]["has_many"][$has_many_key]);
+						// unset($result[$rel["foreign_plural"]]["has_many"][$has_many_key]);
+						array_push($has_manies_to_unset, array($rel["foreign_plural"], $has_many_key) );
+
+
+						array_push($result[$table_key]["has_many_belong_many"], $rel_name);
+						unset($result[$table_key]["has_many"][$rel_key]);
 					} else {
 						array_push($result[$rel["foreign_plural"]]["has_one"], $rel["foreign_rel_name"]);
 					}
 				}
+			}
+			// var_dump($has_manies_to_unset);
+			foreach ($has_manies_to_unset as $key => $value) {
+				unset($result[$value[0]]["has_many"][$value[1]]);
+				// echo "<br>result[".$value[0]."][\"has_many\"][".$value[1]."]";
 			}
 		}
 

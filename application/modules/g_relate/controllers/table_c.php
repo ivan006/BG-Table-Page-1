@@ -24,6 +24,8 @@ class Table_c extends MY_Controller
 			}
 		}
 		$data["overview"]["foreign_plural"] = $g_tbls_table;
+		$data["overview"]["foreign_singular"] = $this->g_migrate->grammar_singular($data["overview"]["foreign_plural"]);
+		$data["overview"]["rel_name"] = $data["overview"]["foreign_singular"];
 		$data["data_endpoint"] = $g_tbls_table."/fetch";
 		$data['title'] = $g_tbls_table;
 		$this->load->view('table_header_v', $data);

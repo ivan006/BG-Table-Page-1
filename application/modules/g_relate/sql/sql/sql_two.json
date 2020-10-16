@@ -23,12 +23,20 @@
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
-        "event_id": {
+        "bedding_specialty_event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "personal_specialty_event_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         }
     },
     "resources": {
+        "event_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
         "event_resource_link_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
