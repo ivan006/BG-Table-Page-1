@@ -1,11 +1,12 @@
 {
-  "events": {
-    "resources": ""
-  },
-  "resources": {
-    "events": ""
-  },
-  "organizations": {
-    "events": "host"
-  }
+  "events": [
+    "resources"
+  ],
+  "resources": [
+    "events"
+  ],
+  "organizations": [
+    "buyer_specialty_events",
+    "seller_specialty_events"
+  ]
 }

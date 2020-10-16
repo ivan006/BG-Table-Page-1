@@ -13,7 +13,7 @@ class G_migrate extends MY_Controller
 
 	function sql_three()
 	{
-		$sql_two_path = APPPATH.'modules/g_relate/sql/sql_two.json';
+		$sql_two_path = APPPATH.'modules/g_relate/sql/sql/sql_two.json';
 		// include($sql_two_path);
 		$sql_two = file_get_contents($sql_two_path);
 		$sql_two = json_decode($sql_two, true);
@@ -82,7 +82,7 @@ class G_migrate extends MY_Controller
 
 	function sql_two()
 	{
-		$one_path = APPPATH.'modules/g_relate/sql/one.json';
+		$one_path = APPPATH.'modules/g_relate/sql/sql/one.json';
 		// include($one_path);
 		$one = file_get_contents($one_path);
 		$one = json_decode($one, true);
@@ -111,48 +111,58 @@ class G_migrate extends MY_Controller
 
 			$tables[$table_key] = array();
 
-			foreach ($table_value["has_many"] as $rel_key => $rel_value) {
-				if ($rel_value !== "") {
-					$speciality = $rel_value."_specialty_";
-				} else {
-					$speciality = "";
-				}
-				$rel_key = $this->grammar_singular($rel_key);
-				$tables[$table_key][$speciality.$rel_key."_children"] = array(
-				"type" => "BIGINT",
-				"collation" => "UNSIGNED",
-				);
-			}
-			foreach ($table_value["has_one"] as $rel_key => $rel_value) {
-				if ($rel_value !== "") {
-					$speciality = $rel_value."_specialty_";
-				} else {
-					$speciality = "";
-				}
-				$rel_key = $this->grammar_singular($rel_key);
-				$tables[$table_key][$speciality.$rel_key."_id"] = array(
-				"type" => "BIGINT",
-				"collation" => "UNSIGNED",
-				);
-			}
-			foreach ($table_value["has_many_belong_many"] as $rel_key => $rel_value) {
-				if ($rel_value !== "") {
-					$speciality = $rel_value."_specialty_";
-				} else {
-					$speciality = "";
-				}
-				$table_key_singular = $this->grammar_singular($table_key);
+			foreach ($table_value["has_many"] as $rel_name) {
+				// if ($rel_value !== "") {
+				// 	$speciality = $rel_value."_specialty_";
+				//
+				//
+				// } else {
+				// 	$speciality = "";
+				// }
+				// $rel_key = $this->grammar_singular($rel_name);
 
-				$rel_key = $this->grammar_singular($rel_key);
+				$rel = $this->relationship_helper($rel_name, $table_key);
+
+				$tables[$table_key][$rel["rel_name_singular"]."_children"] = array(
+				"type" => "BIGINT",
+				"collation" => "UNSIGNED",
+				);
+			}
+			foreach ($table_value["has_one"] as $rel_name) {
+				// if ($rel_value !== "") {
+				// 	$speciality = $rel_value."_specialty_";
+				// } else {
+				// 	$speciality = "";
+				// }
+				// $rel_key = $this->grammar_singular($rel_key);
+				$rel = $this->relationship_helper($rel_name, $table_key);
+				$tables[$table_key][$rel["rel_name_singular"]."_id"] = array(
+				"type" => "BIGINT",
+				"collation" => "UNSIGNED",
+				);
+			}
+			foreach ($table_value["has_many_belong_many"] as $rel_name) {
+				// if ($rel_value !== "") {
+				// 	$speciality = $rel_value."_specialty_";
+				// } else {
+				// 	$speciality = "";
+				// }
+				// $rel_key = $this->grammar_singular($rel_key);
+				$table_key_singular = $this->grammar_singular($table_key);
+				$rel = $this->relationship_helper($rel_name, $table_key);
+
+				// echo $rel["rel_name_singular"]."----".$rel["foreign_singular"]."<br>";
 				$link_table = array(
 					$table_key_singular,
-					$rel_key
+					// $rel["rel_name_singular"]
+					$rel["foreign_singular"]
 				);
 				sort($link_table);
 				$link_table = implode("_",$link_table);
-				$link_table = $speciality.$link_table."_links";
+				// $link_table = $rel["specialty_prefix"].$link_table."_links";
+				$link_table = $link_table."_links";
 
-				$tables[$link_table][$speciality.$rel_key."_id"] = array(
+				$tables[$link_table][$rel["rel_name_singular"]."_id"] = array(
 				"type" => "BIGINT",
 				"collation" => "UNSIGNED",
 				);
@@ -191,17 +201,22 @@ class G_migrate extends MY_Controller
 		}
 
 		foreach ($result as $table_key => $table_value) {
-			foreach ($table_value["has_many"] as $rel_foreigner => $rel_speciality) {
-				if (isset($result[$rel_foreigner])) {
+			foreach ($table_value["has_many"] as $rel_name) {
 
-					if (array_key_exists($table_key, $result[$rel_foreigner]["has_many"])) {
-						// echo $table_key." in ".$rel_foreigner." has_many<br>";
-						// array_push($result[$rel_foreigner]["has_many_belong_many"], $table_key);
-						$result[$rel_foreigner]["has_many_belong_many"][$table_key] = $rel_speciality;
-						unset($result[$rel_foreigner]["has_many"][$table_key]);
+				$rel = $this->relationship_helper($rel_name, $table_key);
+
+				if (isset($result[$rel["foreign_plural"]])) {
+
+
+					// echo $foreign_rel_name."-- <br>";
+
+					$has_many_key = array_search($rel["foreign_rel_name"], $result[$rel["foreign_plural"]]["has_many"]);
+					if ($has_many_key !== false) {
+						// echo $table_key." in ".$rel_name." has_many<br>";
+						array_push($result[$rel["foreign_plural"]]["has_many_belong_many"], $table_key);
+						unset($result[$rel["foreign_plural"]]["has_many"][$has_many_key]);
 					} else {
-						// array_push($result[$rel_foreigner]["has_one"],$table_key);
-						$result[$rel_foreigner]["has_one"][$table_key] = $rel_speciality;
+						array_push($result[$rel["foreign_plural"]]["has_one"], $rel["foreign_rel_name"]);
 					}
 				}
 			}
@@ -212,7 +227,7 @@ class G_migrate extends MY_Controller
 
 	function model_two()
 	{
-		$one_path = APPPATH.'modules/g_relate/sql/one.json';
+		$one_path = APPPATH.'modules/g_relate/sql/sql/one.json';
 		$one = file_get_contents($one_path);
 		$one = json_decode($one, true);
 
@@ -279,6 +294,28 @@ class G_migrate extends MY_Controller
 		return $string;
 	}
 
+	function relationship_helper($rel_name, $local_table) {
+		$rel_name_singular = $this->grammar_singular($rel_name);
+		$specialty_explode = $this->specialty_explode($rel_name_singular);
+
+		$specialty = $specialty_explode[1];
+		$specialty_prefix = $this->specialty_prefix($specialty);
+		$foreign_singular = $specialty_explode[0];
+		$foreign_plural = $this->grammar_plural($foreign_singular);
+		$foreign_rel_name = $specialty_prefix.$local_table;
+
+		$rel = array(
+			"rel_name_singular" => $rel_name_singular,
+			"specialty" => $specialty,
+			"specialty_prefix" => $specialty_prefix,
+			"foreign_singular" => $foreign_singular,
+			"foreign_plural" => $foreign_plural,
+			"foreign_rel_name" => $foreign_rel_name,
+		);
+
+		return $rel;
+	}
+
 	function grammar_plural( $string ) {
 		if ($this->endsWith( $string, "y" )) {
 			$string = substr($string, 0, -1)."ies";
@@ -286,5 +323,39 @@ class G_migrate extends MY_Controller
 			$string = $string."s";
 		}
 		return $string;
+	}
+
+
+
+	function specialty_explode($haystack)
+	{
+
+
+		$needle = "/(.*?)_specialty_(.*)/i";
+		$check_match = preg_match($needle, $haystack, $reg_results);
+		if ($check_match) {
+			$result = array(
+				$reg_results[2],
+				$reg_results[1]
+			);
+		} else {
+			$result = array(
+				$haystack,
+				""
+			);
+		}
+		return $result;
+
+	}
+
+	function specialty_prefix($specialty)
+	{
+		if ($specialty !== "") {
+			$result = $specialty."_specialty_";
+		} else {
+			$result = "";
+		}
+		return $result;
+
 	}
 }

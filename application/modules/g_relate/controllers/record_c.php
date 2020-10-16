@@ -68,38 +68,6 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function specialty_explode($haystack)
-	{
-
-
-		$needle = "/(.*?)_specialty_(.*)/i";
-		$check_match = preg_match($needle, $haystack, $reg_results);
-		if ($check_match) {
-			$result = array(
-				$reg_results[2],
-				$reg_results[1]
-			);
-		} else {
-			$result = array(
-				$haystack,
-				""
-			);
-		}
-		return $result;
-
-	}
-
-	public function specialty_prefix($specialty)
-	{
-		if ($specialty !== "") {
-			$result = $specialty."_specialty_";
-		} else {
-			$result = "";
-		}
-		return $result;
-
-	}
-
 	public function relations($parent_overview, $parent_record, $dont_scan)
 	{
 		$rows = $this->g_tbls->table_rows($parent_overview["foreign_plural"]);
@@ -110,7 +78,7 @@ class Record_c extends MY_Controller
 					$suffix = "_id";
 					$overview["rel_name"] = $this->suffix_remover($key, $suffix);
 
-					$specialty_explode = $this->specialty_explode($overview["rel_name"]);
+					$specialty_explode = $this->g_migrate->specialty_explode($overview["rel_name"]);
 
 					$overview["foreign_singular"] = $specialty_explode[0];
 					$overview["specialty"] = $specialty_explode[1];
@@ -150,7 +118,7 @@ class Record_c extends MY_Controller
 					$suffix = "_children";
 					$overview["rel_name"] = $this->suffix_remover($key, $suffix);
 
-					$specialty_explode = $this->specialty_explode($overview["rel_name"]);
+					$specialty_explode = $this->g_migrate->specialty_explode($overview["rel_name"]);
 
 					$overview["foreign_singular"] = $specialty_explode[0];
 					$overview["specialty"] = $specialty_explode[1];
@@ -228,8 +196,9 @@ class Record_c extends MY_Controller
 						// var_dump($parent_overview);
 
 						if (!empty($parent_record)) {
-							$spec_suffix = $this->specialty_prefix($overview["specialty"]);
-							$haystack = $spec_suffix.$parent_overview["foreign_singular"]."_id";
+							$spec_prefix = $this->g_migrate->specialty_prefix($overview["specialty"]);
+							$foreign_rel_name = $spec_prefix.$parent_overview["foreign_singular"];
+							$haystack = $foreign_rel_name."_id";
 							$needle = $parent_record["id"];
 
 							$data_endpoint = "fetch_where/h/$haystack/n/$needle";

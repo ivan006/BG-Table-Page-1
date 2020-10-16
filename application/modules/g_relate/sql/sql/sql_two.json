@@ -1,6 +1,10 @@
 {
     "events": {
-        "host_specialty_organization_id": {
+        "buyer_specialty_organization_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "seller_specialty_organization_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
@@ -36,7 +40,11 @@
         }
     },
     "organizations": {
-        "host_specialty_event_children": {
+        "buyer_specialty_event_children": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "seller_specialty_event_children": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },
