@@ -18,12 +18,12 @@ class Table_c extends MY_Controller
 		$data["rows"]["all"] = $this->g_tbls->table_rows($g_tbls_table);
 		$data["rows"]["visible"] = array();
 		foreach ($data["rows"]["all"] as $key => $value) {
-			// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["singular"]."_id" !== $join_merge_key) {
+			// if (!$this->g_migrate->endsWith($join_merge_key, "_children") && $parent_name["foreign_singular"]."_id" !== $join_merge_key) {
 			if (!$this->g_migrate->endsWith($key, "_children")) {
 				$data["rows"]["visible"][$key] = $value;
 			}
 		}
-		$data["overview"]["plural"] = $g_tbls_table;
+		$data["overview"]["foreign_plural"] = $g_tbls_table;
 		$data["data_endpoint"] = $g_tbls_table."/fetch";
 		$data['title'] = $g_tbls_table;
 		$this->load->view('table_header_v', $data);
