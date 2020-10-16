@@ -34,9 +34,9 @@ class Record_c extends MY_Controller
 		$body["rows"] = $this->relations($body["overview"], $record, $dont_scan);
 
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 
 
@@ -86,16 +86,16 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function specialty_implode($specialty, $table)
-	{
-		if ($specialty !== "") {
-			$result = $specialty."_specialty_".$table;
-		} else {
-			$result = $table;
-		}
-		return $result;
-
-	}
+	// public function specialty_implode($specialty, $table)
+	// {
+	// 	if ($specialty !== "") {
+	// 		$result = $specialty."_specialty_".$table;
+	// 	} else {
+	// 		$result = $table;
+	// 	}
+	// 	return $result;
+	//
+	// }
 
 	public function relations($parent_name, $parent_record, $dont_scan)
 	{
@@ -105,24 +105,18 @@ class Record_c extends MY_Controller
 				if ($this->g_migrate->endsWith($key, "_id")) {
 
 					$suffix = "_id";
-					$name["singular"] = $this->suffix_remover($key, $suffix);
+					$overview["rel_name"] = $this->suffix_remover($key, $suffix);
 
-					$specialty_explode = $this->specialty_explode($name["singular"]);
+					$specialty_explode = $this->specialty_explode($overview["rel_name"]);
 
-					$name["singular"] = $specialty_explode[0];
-					$specialty = $specialty_explode[1];
+					$overview["singular"] = $specialty_explode[0];
+					$overview["specialty"] = $specialty_explode[1];
 
-					$rel_name = $this->specialty_implode($specialty, $name["singular"]);
-
-					// var_dump($specialty);
-					// var_dump($name["singular"]);
-					// var_dump($rel_name);
-
-					$name["plural"] = $this->g_migrate->grammar_plural($name["singular"]);
+					$overview["plural"] = $this->g_migrate->grammar_plural($overview["singular"]);
 
 					if (!empty($parent_record)) {
 						$haystack = "id";
-						$needle = $parent_record[$rel_name."_id"];
+						$needle = $parent_record[$overview["rel_name"]."_id"];
 						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
 
 					} else {
@@ -130,8 +124,8 @@ class Record_c extends MY_Controller
 					}
 
 
-					$name["type"] = "owner";
-					$sub_rows["all"] = $this->g_tbls->table_rows($name["plural"]);
+					$overview["type"] = "owner";
+					$sub_rows["all"] = $this->g_tbls->table_rows($overview["plural"]);
 
 					$sub_rows["visible"] = array();
 					foreach ($sub_rows["all"] as $sub_rows_key => $sub_rows_value) {
@@ -142,7 +136,7 @@ class Record_c extends MY_Controller
 					}
 
 					$result["all"][$key] = array(
-						"overview" => $name,
+						"overview" => $overview,
 						"rows" => $sub_rows,
 						"data_endpoint" => $data_endpoint,
 					);
@@ -151,11 +145,16 @@ class Record_c extends MY_Controller
 				} elseif ($this->g_migrate->endsWith($key, "_children")) {
 
 					$suffix = "_children";
-					$name["singular"] = $this->suffix_remover($key, $suffix);
+					$overview["rel_name"] = $this->suffix_remover($key, $suffix);
 
-					$name["plural"] = $this->g_migrate->grammar_plural($name["singular"]);
+					$specialty_explode = $this->specialty_explode($overview["rel_name"]);
 
-					if ($this->g_migrate->endsWith($name["plural"], "_links")) {
+					$overview["singular"] = $specialty_explode[0];
+					$overview["specialty"] = $specialty_explode[1];
+
+					$overview["plural"] = $this->g_migrate->grammar_plural($overview["singular"]);
+
+					if ($this->g_migrate->endsWith($overview["plural"], "_links")) {
 
 
 						if (!empty($parent_record)) {
@@ -167,13 +166,13 @@ class Record_c extends MY_Controller
 							$data_endpoint = "";
 						}
 
-						$name["type"] = "reusable_items";
-						// $sub_rows = $this->g_tbls->table_rows($name["plural"]);
+						$overview["type"] = "reusable_items";
+						// $sub_rows = $this->g_tbls->table_rows($overview["plural"]);
 
 						$record = array();
 						$dont_scan = $parent_name["singular"]."_id";
 
-						$sub_rows = $this->relations($name, $record, $dont_scan);
+						$sub_rows = $this->relations($overview, $record, $dont_scan);
 
 
 
@@ -211,7 +210,7 @@ class Record_c extends MY_Controller
 						$join["overview"] = $lookup_table["overview"];
 
 						$result["all"][$key] = array(
-							"overview" => $name,
+							"overview" => $overview,
 							"rows" => $sub_rows,
 							"data_endpoint" => $data_endpoint,
 							"join" => $join,
@@ -232,9 +231,9 @@ class Record_c extends MY_Controller
 						} else {
 							$data_endpoint = "";
 						}
-						$name["type"] = "dedicated_items";
+						$overview["type"] = "dedicated_items";
 
-						$sub_rows["all"] = $this->g_tbls->table_rows($name["plural"]);
+						$sub_rows["all"] = $this->g_tbls->table_rows($overview["plural"]);
 
 						$sub_rows["visible"] = array();
 						foreach ($sub_rows["all"] as $sub_rows_key => $sub_rows_value) {
@@ -247,7 +246,7 @@ class Record_c extends MY_Controller
 
 
 						$result["all"][$key] = array(
-						"overview" => $name,
+						"overview" => $overview,
 						"rows" => $sub_rows,
 						"data_endpoint" => $data_endpoint,
 						);
