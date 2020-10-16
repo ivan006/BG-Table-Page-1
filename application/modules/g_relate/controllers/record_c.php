@@ -31,12 +31,12 @@ class Record_c extends MY_Controller
 		$body["name"]["type"] = "overview";
 		$dont_scan = "";
 
-		$body["rows"] = $this->children($body["name"], $record, $dont_scan);
+		$body["rows"] = $this->relations($body["name"], $record, $dont_scan);
 
 
-		// header('Content-Type: application/json');
-		// echo json_encode($body, JSON_PRETTY_PRINT);
-		// exit;
+		header('Content-Type: application/json');
+		echo json_encode($body, JSON_PRETTY_PRINT);
+		exit;
 
 
 
@@ -65,7 +65,39 @@ class Record_c extends MY_Controller
 
 	}
 
-	public function children($parent_name, $parent_record, $dont_scan)
+	public function specialty_explode($haystack)
+	{
+
+
+		$needle = "/(.*?)_specialty_(.*)/i";
+		$check_match = preg_match($needle, $haystack, $reg_results);
+		if ($check_match) {
+			$result = array(
+				$reg_results[2],
+				$reg_results[1]
+			);
+		} else {
+			$result = array(
+				$haystack,
+				""
+			);
+		}
+		return $result;
+
+	}
+
+	public function specialty_implode($specialty, $table)
+	{
+		if ($specialty !== "") {
+			$result = $specialty."_specialty_".$table;
+		} else {
+			$result = $table;
+		}
+		return $result;
+
+	}
+
+	public function relations($parent_name, $parent_record, $dont_scan)
 	{
 		$rows = $this->g_tbls->table_rows($parent_name["plural"]);
 		foreach ($rows as $key => $value) {
@@ -75,12 +107,22 @@ class Record_c extends MY_Controller
 					$suffix = "_id";
 					$name["singular"] = $this->suffix_remover($key, $suffix);
 
+					$specialty_explode = $this->specialty_explode($name["singular"]);
+
+					$name["singular"] = $specialty_explode[0];
+					$specialty = $specialty_explode[1];
+
+					$rel_name = $this->specialty_implode($specialty, $name["singular"]);
+
+					// var_dump($specialty);
+					// var_dump($name["singular"]);
+					// var_dump($rel_name);
 
 					$name["plural"] = $this->g_migrate->grammar_plural($name["singular"]);
 
 					if (!empty($parent_record)) {
 						$haystack = "id";
-						$needle = $parent_record[$name["singular"]."_id"];
+						$needle = $parent_record[$rel_name."_id"];
 						$data_endpoint = "fetch_where/h/$haystack/n/$needle";
 
 					} else {
@@ -131,7 +173,7 @@ class Record_c extends MY_Controller
 						$record = array();
 						$dont_scan = $parent_name["singular"]."_id";
 
-						$sub_rows = $this->children($name, $record, $dont_scan);
+						$sub_rows = $this->relations($name, $record, $dont_scan);
 
 
 
