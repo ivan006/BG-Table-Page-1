@@ -19,7 +19,11 @@
         }
     },
     "event_resource_links": {
-        "resource_id": {
+        "bedding_specialty_resource_id": {
+            "type": "BIGINT",
+            "collation": "UNSIGNED"
+        },
+        "personal_specialty_resource_id": {
             "type": "BIGINT",
             "collation": "UNSIGNED"
         },

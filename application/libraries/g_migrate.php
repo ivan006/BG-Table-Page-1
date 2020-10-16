@@ -224,13 +224,12 @@ class G_migrate extends MY_Controller
 						$has_many_key = $has_many_key_generic;
 					}
 
-					// echo "<pre>";
-					// echo $table_key."	-	".$rel_name."	-	".$rel["foreign_rel_name"]."	-	".$table_key."	-	#".$has_many_key."#"."<br>";
+					// echo "<pre>".$table_key."	-	".$rel_name."	-	".$rel["foreign_rel_name"]."	-	".$table_key."	-	#".$has_many_key."#"."<br>";
 					// echo "</table>";
 
 					if ($has_many_key !== false) {
 						// echo $table_key." in ".$rel_name." has_many<br>";
-						array_push($result[$rel["foreign_plural"]]["has_many_belong_many"], $table_key);
+						array_push($result[$rel["foreign_plural"]]["has_many_belong_many"], $rel["foreign_rel_name"]);
 						// unset($result[$rel["foreign_plural"]]["has_many"][$has_many_key]);
 						array_push($has_manies_to_unset, array($rel["foreign_plural"], $has_many_key) );
 
