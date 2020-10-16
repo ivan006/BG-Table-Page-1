@@ -25,8 +25,8 @@ class Record_c extends MY_Controller
 		$body["overview"]["foreign_plural"] = $table;
 		$body["overview"]["foreign_singular"] = $overview_table_singular;
 		$record = $this->g_tbls->fetch_where($body["overview"]["foreign_plural"], "id", $record_id)["posts"][0];
-		$overview["rel_name"] = $body["overview"]["foreign_singular"];
-		$overview["specialty"] = "";
+		$body["overview"]["rel_name"] = $body["overview"]["foreign_singular"];
+		$body["overview"]["specialty"] = "";
 
 		$haystack = "id";
 		$needle = $record_id;
