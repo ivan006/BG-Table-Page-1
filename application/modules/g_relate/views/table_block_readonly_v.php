@@ -9,7 +9,7 @@ $readable_rows = $rows["visible"];
 <div class="row">
   <div class="col-md-12 mt-4">
     <div class="table-responsive">
-      <table class="table" id="<?php echo $name["table_id"]; ?>_records">
+      <table class="table" id="<?php echo $overview["table_id"]; ?>_records">
         <thead>
           <tr>
             <th>ID</th>
@@ -40,7 +40,7 @@ $readable_rows = $rows["visible"];
 
   // Fetch Records
 
-  function <?php echo $name["table_id"]; ?>_fetch(){
+  function <?php echo $overview["table_id"]; ?>_fetch(){
     $.ajax({
       url: "<?php echo base_url(); ?><?php echo $data_endpoint; ?>",
       type: "post",
@@ -49,7 +49,7 @@ $readable_rows = $rows["visible"];
         if (data.responce == "success") {
 
           var i = "1";
-          $('#<?php echo $name["table_id"]; ?>_records').DataTable( {
+          $('#<?php echo $overview["table_id"]; ?>_records').DataTable( {
             "data": data.posts,
             // "responsive": true,
             dom:
@@ -91,7 +91,7 @@ $readable_rows = $rows["visible"];
 
   }
 
-  <?php echo $name["table_id"]; ?>_fetch();
+  <?php echo $overview["table_id"]; ?>_fetch();
 
 
 </script>

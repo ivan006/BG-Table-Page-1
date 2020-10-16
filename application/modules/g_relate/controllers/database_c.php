@@ -21,7 +21,7 @@ class Database_c extends MY_Controller
 
 
 		$data["rows"]["visible"] = array("name"=>array());
-		$data["name"]["table_id"] = "";
+		$data["overview"]["table_id"] = "";
 		$data["data_endpoint"] = "g_relate/database_api";
 		$data['title'] = "Database";
 		$this->load->view('table_header_v', $data);

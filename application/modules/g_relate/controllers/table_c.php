@@ -23,7 +23,7 @@ class Table_c extends MY_Controller
 				$data["rows"]["visible"][$key] = $value;
 			}
 		}
-		$data["name"]["plural"] = $g_tbls_table;
+		$data["overview"]["plural"] = $g_tbls_table;
 		$data["data_endpoint"] = $g_tbls_table."/fetch";
 		$data['title'] = $g_tbls_table;
 		$this->load->view('table_header_v', $data);

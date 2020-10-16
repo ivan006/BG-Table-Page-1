@@ -5,7 +5,7 @@ if (!isset($join)) {
   $editable_rows = $rows["visible"];
   $readable_rows = $rows["visible"];
 
-  $view_link_table = $name["plural"];
+  $view_link_table = $overview["plural"];
   $view_link_id_key = "id";
 } else {
 
@@ -13,22 +13,22 @@ if (!isset($join)) {
   $readable_rows = $join["rows"]["visible"];
   $data_endpoint = $join["data_endpoint"];
 
-  $lookup_table_names = $join["lookup"]["name"];
-  $view_link_table = $join["name"]["plural"];
-  $view_link_id_key = $join["name"]["singular"]."_id";
+  $lookup_table_names = $join["lookup"]["overview"];
+  $view_link_table = $join["overview"]["plural"];
+  $view_link_id_key = $join["overview"]["singular"]."_id";
 }
 ?>
 
 <?php
-if (isset($name["type"])) {
-  if ($name["type"] == "overview") {
-    $subtitle = $name["type"];
-  } elseif ($name["type"] == "owner") {
-    $subtitle = $name["singular"]." (".$name["type"].")";
-  } elseif ($name["type"] == "reusable_items") {
-    $subtitle = $join["name"]["plural"]." (".$name["type"].")";
+if (isset($overview["type"])) {
+  if ($overview["type"] == "overview") {
+    $subtitle = $overview["type"];
+  } elseif ($overview["type"] == "owner") {
+    $subtitle = $overview["singular"]." (".$overview["type"].")";
+  } elseif ($overview["type"] == "reusable_items") {
+    $subtitle = $join["overview"]["plural"]." (".$overview["type"].")";
   } else {
-    $subtitle = $name["plural"]." (".$name["type"].")";
+    $subtitle = $overview["plural"]." (".$overview["type"].")";
   }
   ?>
     <div class="row">
@@ -46,30 +46,30 @@ if (isset($name["type"])) {
   <div class="col-md-12 mt-2">
     <!-- Add Records Modal -->
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#<?php echo $name["plural"]; ?>_exampleModal">
+    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#<?php echo $overview["plural"]; ?>_exampleModal">
       Add Records
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="<?php echo $name["plural"]; ?>_exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="<?php echo $overview["plural"]; ?>_exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="<?php echo $name["plural"]; ?>_exampleModalLabel">Add Records</h5>
+            <h5 class="modal-title" id="<?php echo $overview["plural"]; ?>_exampleModalLabel">Add Records</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <!-- Add Records Form -->
-            <form action="" method="post" id="<?php echo $name["plural"]; ?>_form">
+            <form action="" method="post" id="<?php echo $overview["plural"]; ?>_form">
               <?php
               foreach ($editable_rows as $key => $value) {
                 if ($key !== "id") {
                   ?>
                   <div class="form-group">
                     <label for=""><?php echo $key; ?></label>
-                    <input type="<?php echo $key; ?>" id="<?php echo $name["plural"]; ?>_<?php echo $key; ?>" class="form-control">
+                    <input type="<?php echo $key; ?>" id="<?php echo $overview["plural"]; ?>_<?php echo $key; ?>" class="form-control">
                   </div>
                   <?php
                 }
@@ -77,17 +77,17 @@ if (isset($name["type"])) {
               ?>
               <!-- <div class="form-group"> -->
               <!-- <label for="">Name</label> -->
-              <!-- <input type="text" id="<?php echo $name["plural"]; ?>_name" class="form-control"> -->
+              <!-- <input type="text" id="<?php echo $overview["plural"]; ?>_name" class="form-control"> -->
               <!-- </div> -->
               <!-- <div class="form-group"> -->
               <!-- <label for="">Event_children</label> -->
-              <!-- <input type="event_children" id="<?php echo $name["plural"]; ?>_event_children" class="form-control"> -->
+              <!-- <input type="event_children" id="<?php echo $overview["plural"]; ?>_event_children" class="form-control"> -->
               <!-- </div> -->
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="<?php echo $name["plural"]; ?>_add">Add Records</button>
+            <button type="button" class="btn btn-primary" id="<?php echo $overview["plural"]; ?>_add">Add Records</button>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ if (isset($name["type"])) {
 <div class="row">
   <div class="col-md-12 mt-4">
     <div class="table-responsive">
-      <table class="table" id="<?php echo $name["plural"]; ?>_records">
+      <table class="table" id="<?php echo $overview["plural"]; ?>_records">
         <thead>
           <tr>
             <th>ID</th>
@@ -122,26 +122,26 @@ if (isset($name["type"])) {
 
 
 <!-- Edit Record Modal -->
-<div class="modal fade" id="<?php echo $name["plural"]; ?>_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="<?php echo $overview["plural"]; ?>_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="<?php echo $name["plural"]; ?>_exampleModalLabel">Edit Record Modal</h5>
+        <h5 class="modal-title" id="<?php echo $overview["plural"]; ?>_exampleModalLabel">Edit Record Modal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <!-- Edit Record Form -->
-        <form action="" method="post" id="<?php echo $name["plural"]; ?>_edit_form">
-          <input type="hidden" id="<?php echo $name["plural"]; ?>_edit_record_id" name="edit_record_id" value="">
+        <form action="" method="post" id="<?php echo $overview["plural"]; ?>_edit_form">
+          <input type="hidden" id="<?php echo $overview["plural"]; ?>_edit_record_id" name="edit_record_id" value="">
           <?php
           foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
               <div class="form-group">
                 <label for=""><?php echo $key; ?></label>
-                <input type="<?php echo $key; ?>" id="<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>" class="form-control">
+                <input type="<?php echo $key; ?>" id="<?php echo $overview["plural"]; ?>_edit_<?php echo $key; ?>" class="form-control">
               </div>
               <?php
             }
@@ -149,17 +149,17 @@ if (isset($name["type"])) {
           ?>
           <!-- <div class="form-group">
             <label for="">Name</label>
-            <input type="text" id="<?php echo $name["plural"]; ?>_edit_name" class="form-control">
+            <input type="text" id="<?php echo $overview["plural"]; ?>_edit_name" class="form-control">
           </div>
           <div class="form-group">
             <label for="">Event_children</label>
-            <input type="event_children" id="<?php echo $name["plural"]; ?>_edit_event_children" class="form-control">
+            <input type="event_children" id="<?php echo $overview["plural"]; ?>_edit_event_children" class="form-control">
           </div> -->
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="<?php echo $name["plural"]; ?>_update">Update</button>
+        <button type="button" class="btn btn-primary" id="<?php echo $overview["plural"]; ?>_update">Update</button>
       </div>
     </div>
   </div>
@@ -167,27 +167,27 @@ if (isset($name["type"])) {
 
 <!-- Add Records -->
 <script>
-  $(document).on("click", "#<?php echo $name["plural"]; ?>_add", function(e){
+  $(document).on("click", "#<?php echo $overview["plural"]; ?>_add", function(e){
     e.preventDefault();
 
     <?php
     foreach ($editable_rows as $key => $value) {
       if ($key !== "id") {
         ?>
-        var <?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_<?php echo $key; ?>").val();
+        var <?php echo $key; ?> = $("#<?php echo $overview["plural"]; ?>_<?php echo $key; ?>").val();
         <?php
       }
     }
     ?>
-    // var name = $("#<?php echo $name["plural"]; ?>_name").val();
-    // var event_children = $("#<?php echo $name["plural"]; ?>_event_children").val();
+    // var name = $("#<?php echo $overview["plural"]; ?>_name").val();
+    // var event_children = $("#<?php echo $overview["plural"]; ?>_event_children").val();
 
     // if (name == "")
     if (1 !== 1) {
       alert("Both field is required");
     }else{
       $.ajax({
-        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/insert",
+        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $overview["plural"]; ?>/insert",
         type: "post",
         dataType: "json",
         data: {
@@ -205,9 +205,9 @@ if (isset($name["type"])) {
         },
         success: function(data){
           if (data.responce == "success") {
-            $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
-            <?php echo $name["plural"]; ?>_fetch();
-            $('#<?php echo $name["plural"]; ?>_exampleModal').modal('hide');
+            $('#<?php echo $overview["plural"]; ?>_records').DataTable().destroy();
+            <?php echo $overview["plural"]; ?>_fetch();
+            $('#<?php echo $overview["plural"]; ?>_exampleModal').modal('hide');
             toastr["success"](data.message);
           }else{
             toastr["error"](data.message);
@@ -216,7 +216,7 @@ if (isset($name["type"])) {
         }
       });
 
-      $("#<?php echo $name["plural"]; ?>_form")[0].reset();
+      $("#<?php echo $overview["plural"]; ?>_form")[0].reset();
 
     }
 
@@ -224,16 +224,16 @@ if (isset($name["type"])) {
 
   // Fetch Records
 
-  function <?php echo $name["plural"]; ?>_fetch(){
+  function <?php echo $overview["plural"]; ?>_fetch(){
     $.ajax({
-      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/<?php echo $data_endpoint; ?>",
+      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $overview["plural"]; ?>/<?php echo $data_endpoint; ?>",
       type: "post",
       dataType: "json",
       success: function(data){
         if (data.responce == "success") {
 
           var i = "1";
-          $('#<?php echo $name["plural"]; ?>_records').DataTable( {
+          $('#<?php echo $overview["plural"]; ?>_records').DataTable( {
             "data": data.posts,
             // "responsive": true,
             dom:
@@ -256,12 +256,12 @@ if (isset($name["type"])) {
               }
             }
             ?>
-            // { "data": "name" },
+            // { "data": "overview" },
             // { "data": "event_children" },
             { "render": function ( data, type, row, meta ) {
               var a = `
-              <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
-              <a href="#" value="${row.id}" id="<?php echo $name["plural"]; ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
+              <a href="#" value="${row.id}" id="<?php echo $overview["plural"]; ?>_del" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+              <a href="#" value="${row.id}" id="<?php echo $overview["plural"]; ?>_edit" class="btn btn-sm btn-outline-success"><i class="fas fa-edit"></i></a>
               <a href="/g_relate/record/t/<?php echo $view_link_table; ?>/r/${row.<?php echo $view_link_id_key; ?>}" class="btn btn-sm btn-outline-primary">View</a>
               `;
               return a;
@@ -277,11 +277,11 @@ if (isset($name["type"])) {
 
   }
 
-  <?php echo $name["plural"]; ?>_fetch();
+  <?php echo $overview["plural"]; ?>_fetch();
 
   // Delete Record
 
-  $(document).on("click", "#<?php echo $name["plural"]; ?>_del", function(e){
+  $(document).on("click", "#<?php echo $overview["plural"]; ?>_del", function(e){
     e.preventDefault();
 
     var del_id = $(this).attr("value");
@@ -306,7 +306,7 @@ if (isset($name["type"])) {
       if (result.value) {
 
         $.ajax({
-          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/delete",
+          url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $overview["plural"]; ?>/delete",
           type: "post",
           dataType: "json",
           data: {
@@ -314,8 +314,8 @@ if (isset($name["type"])) {
           },
           success: function(data){
             if (data.responce == "success") {
-              $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
-              <?php echo $name["plural"]; ?>_fetch();
+              $('#<?php echo $overview["plural"]; ?>_records').DataTable().destroy();
+              <?php echo $overview["plural"]; ?>_fetch();
               swalWithBootstrapButtons.fire(
               'Deleted!',
               'Your file has been deleted.',
@@ -350,13 +350,13 @@ if (isset($name["type"])) {
 
   // Edit Record
 
-  $(document).on("click", "#<?php echo $name["plural"]; ?>_edit", function(e){
+  $(document).on("click", "#<?php echo $overview["plural"]; ?>_edit", function(e){
     e.preventDefault();
 
     var edit_id = $(this).attr("value");
 
     $.ajax({
-      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/edit",
+      url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $overview["plural"]; ?>/edit",
       type: "post",
       dataType: "json",
       data: {
@@ -364,19 +364,19 @@ if (isset($name["type"])) {
       },
       success: function(data){
         if (data.responce == "success") {
-          $('#<?php echo $name["plural"]; ?>_edit_modal').modal('show');
-          $("#<?php echo $name["plural"]; ?>_edit_record_id").val(data.post.id);
+          $('#<?php echo $overview["plural"]; ?>_edit_modal').modal('show');
+          $("#<?php echo $overview["plural"]; ?>_edit_record_id").val(data.post.id);
           <?php
           foreach ($editable_rows as $key => $value) {
             if ($key !== "id") {
               ?>
-              $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
+              $("#<?php echo $overview["plural"]; ?>_edit_<?php echo $key; ?>").val(data.post.<?php echo $key; ?>);
               <?php
             }
           }
           ?>
-          // $("#<?php echo $name["plural"]; ?>_edit_name").val(data.post.name);
-          // $("#<?php echo $name["plural"]; ?>_edit_event_children").val(data.post.event_children);
+          // $("#<?php echo $overview["plural"]; ?>_edit_name").val(data.post.name);
+          // $("#<?php echo $overview["plural"]; ?>_edit_event_children").val(data.post.event_children);
         }else{
           toastr["error"](data.message);
         }
@@ -387,29 +387,29 @@ if (isset($name["type"])) {
 
   // Update Record
 
-  $(document).on("click", "#<?php echo $name["plural"]; ?>_update", function(e){
+  $(document).on("click", "#<?php echo $overview["plural"]; ?>_update", function(e){
     e.preventDefault();
 
-    var edit_record_id = $("#<?php echo $name["plural"]; ?>_edit_record_id").val();
+    var edit_record_id = $("#<?php echo $overview["plural"]; ?>_edit_record_id").val();
     <?php
     foreach ($editable_rows as $key => $value) {
       if ($key !== "id") {
         ?>
-        var edit_<?php echo $key; ?> = $("#<?php echo $name["plural"]; ?>_edit_<?php echo $key; ?>").val();
+        var edit_<?php echo $key; ?> = $("#<?php echo $overview["plural"]; ?>_edit_<?php echo $key; ?>").val();
         <?php
       }
     }
     ?>
 
-    // var edit_name = $("#<?php echo $name["plural"]; ?>_edit_name").val();
-    // var edit_event_children = $("#<?php echo $name["plural"]; ?>_edit_event_children").val();
+    // var edit_name = $("#<?php echo $overview["plural"]; ?>_edit_name").val();
+    // var edit_event_children = $("#<?php echo $overview["plural"]; ?>_edit_event_children").val();
 
     // if (edit_record_id == "" || edit_name == "")
     if (1 !== 1) {
       alert("Both field is required");
     }else{
       $.ajax({
-        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $name["plural"]; ?>/update",
+        url: "<?php echo base_url(); ?>g_relate/api/table/t/<?php echo $overview["plural"]; ?>/update",
         type: "post",
         dataType: "json",
         data: {
@@ -428,9 +428,9 @@ if (isset($name["type"])) {
         },
         success: function(data){
           if (data.responce == "success") {
-            $('#<?php echo $name["plural"]; ?>_records').DataTable().destroy();
-            <?php echo $name["plural"]; ?>_fetch();
-            $('#<?php echo $name["plural"]; ?>_edit_modal').modal('hide');
+            $('#<?php echo $overview["plural"]; ?>_records').DataTable().destroy();
+            <?php echo $overview["plural"]; ?>_fetch();
+            $('#<?php echo $overview["plural"]; ?>_edit_modal').modal('hide');
             toastr["success"](data.message);
           }else{
             toastr["error"](data.message);
