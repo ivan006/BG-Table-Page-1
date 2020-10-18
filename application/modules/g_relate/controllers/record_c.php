@@ -142,7 +142,8 @@ class Record_c extends MY_Controller
 						// $sub_rows = $this->g_tbls->table_rows($overview["foreign_plural"]);
 
 						$record = array();
-						$dont_scan = $parent_overview["foreign_singular"]."_id";
+						// $dont_scan = $parent_overview["foreign_singular"]."_id";
+						$dont_scan = "";
 
 						$sub_rows = $this->relations($overview, $record, $dont_scan);
 
