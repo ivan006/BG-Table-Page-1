@@ -90,5 +90,6 @@ $route['g_relate/api/table/t/(:any)/fetch_join_where/t/(:any)/h/(:any)/n/(:any)'
 
 $route['g_relate/record/t/(:any)/r/(:num)'] = 'g_relate/record_c/index/$1/$2';
 
+$route['mergetest'] = 'g_relate/record_c/mergetest';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

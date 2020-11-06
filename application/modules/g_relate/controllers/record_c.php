@@ -247,4 +247,13 @@ class Record_c extends MY_Controller
 	}
 
 
+
+	public function mergetest()
+	{
+		$result = $this->g_tbls->mergetest();
+		header('Content-Type: application/json');
+		echo json_encode($result, JSON_PRETTY_PRINT);
+	}
+
+
 }

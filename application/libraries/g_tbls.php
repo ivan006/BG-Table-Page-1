@@ -172,6 +172,31 @@ class G_tbls extends MY_Controller
 
   }
 
+  public function mergetest()
+  {
+
+
+
+
+
+		// $posts = $this->db
+		// ->select("`event_resource_links`.*")
+    // ->select("DAY() AS wp_name")
+		// ->from("event_resource_links")
+		// ->join("resources", "event_resource_links.bedding_specialty_resource_id = resources.id", "right")
+		// ->get()
+		// ->result_array();
+
+
+		$sql="Select 'aaa' as asd";
+		// $sql="SELECT '' as table1_dummy, table1.*, '' as table2_dummy, table2.*, '' as table3_dummy, table3.* FROM table1 JOIN table2 ON table2.table1id = table1.id JOIN table3 ON table3.table1id = table1.id";
+		$posts = $this->db->query($sql)->result_array();
+
+		$data = array('responce' => 'success', 'posts' => $posts);
+    return $data;
+
+  }
+
   public function database_api()
   {
 
